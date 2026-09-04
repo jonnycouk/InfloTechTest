@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
@@ -15,12 +16,40 @@ public class UserControllerTests
         var users = SetupUsers();
 
         // Act: Invokes the method under test with the arranged parameters.
-        var result = controller.List();
+        var result = controller.List(null);
 
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Model
             .Should().BeOfType<UserListViewModel>()
             .Which.Items.Should().BeEquivalentTo(users);
+    }
+
+    [Fact]
+    public void List_WhenServiceReturnsUsers_ModelMustContainActiveUsers()
+    {
+        // Arrange
+        var controller = CreateController();
+        SetupUsers();
+
+        // Act
+        var result = controller.List(true);
+
+        // Assert
+        result.Model.Should().BeOfType<UserListViewModel>().Which.Items.Should().OnlyContain(c => c.IsActive);
+    }
+
+    [Fact]
+    public void List_WhenServiceReturnsUsers_ModelMustContainNonActiveUsers()
+    {
+        // Arrange
+        var controller = CreateController();
+        SetupUsers();
+
+        // Act
+        var result = controller.List(false);
+        
+        //Assert
+        result.Model.Should().BeOfType<UserListViewModel>().Which.Items.Should().OnlyContain(c => !c.IsActive);
     }
 
     private User[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)

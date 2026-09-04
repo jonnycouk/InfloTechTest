@@ -2,72 +2,73 @@
 
 <h2>User List (@Model.Items.Count users)</h2>
 
+<!-- Moved filter/menu to the top so users don't have to chase it up and down the screen when the records show -->
+
+<div class="user-menu-buttons">
+    <div class="btn-group" role="group">
+        <a asp-controller="Users" asp-action="List" class="btn btn-default btn-outline-secondary">Show All</a>
+        <a asp-controller="Users" asp-action="List" asp-route-isActive="true" class="btn btn-default btn-outline-secondary">Active Only</a>
+        <a asp-controller="Users" asp-action="List" asp-route-isActive="false" class="btn btn-default btn-outline-secondary">Non Active</a>
+        <a asp-controller="Users" asp-action="List" asp-route-isActive="false" class="btn btn-default btn-primary" style="margin-left: 20px">Add User</a>
+    </div>
+
+</div>
+
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Forename</th>
-                <th>Surname</th>
-                <th>Email</th>
-                <th>Account Active</th>
-                <th>Actions</th>
-                <th style="width: 1px;"></th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Forename</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>Account Active</th>
+            <th>Actions</th>
+            <th style="width: 1px;"></th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr>
-                    <td>
-                        @item.Id
-                    </td>
-                    <td>
-                        @item.Forename
-                    </td>
-                    <td>
-                        @item.Surname
-                    </td>
-                    <td>
-                        @item.Email
-                    </td>
-                    <td>
-                        @if (item.IsActive)
-                        {
-                            <img src="~/assets/glyphs/true.png" alt="Yes" title="Yes" />
-                        }
-                        else
-                        {
-                            <img src="~/assets/glyphs/false.png" alt="No" title = "No" />
-                        }
-                        
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="btnToggleActions">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-                                <li><a class="dropdown-item" href="#">View</a></li>
-                                <li><a class="dropdown-item" href="#">Edit</a></li>
-                                <li><a class="dropdown-item" href="#">Delete</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            }
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    @item.Id
+                </td>
+                <td>
+                    @item.Forename
+                </td>
+                <td>
+                    @item.Surname
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <img src="~/assets/glyphs/true.png" alt="Yes" title="Yes"/>
+                    }
+                    else
+                    {
+                        <img src="~/assets/glyphs/false.png" alt="No" title="No"/>
+                    }
+
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false" id="btnToggleActions">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
+                            <li><a class="dropdown-item" href="#">View</a></li>
+                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
-</div>
-
-<div>
-    <div class="btn-group" role="group">
-        <a asp-controller="Users" asp-action="List" class="btn btn-default">Show All</a>
-        <a href="#" class="btn btn-default">Active Only</a>
-        <a href="#" class="btn btn-default">Non Active</a>
-    </div>
-
-    <a href="#" class="btn btn-primary float-end">
-        Add User
-    </a>
 </div>

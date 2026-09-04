@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.user-menu-buttons
+{
+  padding: 3px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
