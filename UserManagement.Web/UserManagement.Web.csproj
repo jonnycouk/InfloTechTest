@@ -8,4 +8,9 @@
     <ProjectReference Include="..\UserManagement.Services\UserManagement.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\glyphs\" />
+    <Folder Include="wwwroot\favicon\" />
+  </ItemGroup>
+
 </Project>

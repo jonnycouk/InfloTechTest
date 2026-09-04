@@ -1,6 +1,6 @@
 ﻿@model UserManagement.Web.Models.Users.UserListViewModel
 
-<h2>User List</h2>
+<h2>User List (@Model.Items.Count users)</h2>
 
 <div class="table-responsive">
     <table class="table table-striped">
@@ -11,6 +11,7 @@
                 <th>Surname</th>
                 <th>Email</th>
                 <th>Account Active</th>
+                <th>Actions</th>
                 <th style="width: 1px;"></th>
             </tr>
         </thead>
@@ -31,7 +32,15 @@
                         @item.Email
                     </td>
                     <td>
-                        @(item.IsActive ? "Yes" : "No")
+                        @if (item.IsActive)
+                        {
+                            <img src="~/assets/glyphs/true.png" alt="Yes" title="Yes" />
+                        }
+                        else
+                        {
+                            <img src="~/assets/glyphs/false.png" alt="No" title = "No" />
+                        }
+                        
                     </td>
                     <td>
                         <div class="dropdown">
@@ -62,4 +71,3 @@
         Add User
     </a>
 </div>
-

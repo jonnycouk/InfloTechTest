@@ -27,6 +27,8 @@ public class UsersController : Controller
             Items = items.ToList()
         };
 
+        ViewData["Title"] = "User List";
+        
         return View(model);
     }
 }
