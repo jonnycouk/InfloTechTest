@@ -27,3 +27,9 @@ body {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.required-label::after {
+  content: " *";
+  color: #dc3545; /* Bootstrap text-danger red */
+  font-weight: bold;
+}

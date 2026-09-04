@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Users;
 
@@ -7,7 +8,40 @@ namespace UserManagement.WebMS.Controllers;
 [Route("users")]
 public class UsersController(IUserService userService) : Controller
 {
-    [HttpGet]
+    [HttpGet("Create")]
+    public ViewResult Create()
+    {
+        ViewData["Title"] = "Create User";
+        
+        var newUser = new User()
+        {
+            IsActive = true
+        };
+        
+        return View(newUser);
+    }
+
+    [HttpPost("Create")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(User newUser)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Return view with validation errors
+            return View(newUser);
+        }
+        
+        ViewData["Title"] = "Create";
+        
+        // Enforce this in case it was changed in post
+        newUser.IsActive = false;
+        
+        userService.Create(newUser);
+        
+        return RedirectToAction("List");
+    }
+    
+    [HttpGet("List")]
     public ViewResult List(bool? isActive)
     {
         IEnumerable<UserListItemViewModel> items;
