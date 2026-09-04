@@ -18,39 +18,44 @@ public class UsersController(IUserService userService) : Controller
         }
         else
         {
-            items = userService.GetAll().Select(p => new UserListItemViewModel
+            items = userService.GetAll().Select(user => new UserListItemViewModel
             {
-                Id = p.Id,
-                Forename = p.Forename,
-                Surname = p.Surname,
-                Email = p.Email,
-                IsActive = p.IsActive
+                Id = user.Id,
+                Forename = user.Forename,
+                Surname = user.Surname,
+                Email = user.Email,
+                IsActive = user.IsActive,
+                DateOfBirth = user.DateOfBirth
             });
+            
+            ViewData["Title"] = "User List";
         }
 
         var model = new UserListViewModel
         {
             Items = items.ToList()
         };
-
-        ViewData["Title"] = "User List";
         
         return View(model);
     }
 
     private IEnumerable<UserListItemViewModel> GetUsersByActiveState(bool isActive)
     {
-        var items =  userService.FilterByActive(isActive).Select(p => new UserListItemViewModel
+        var items =  userService.FilterByActive(isActive).Select(user => new UserListItemViewModel
         {
-            Id = p.Id,
-            Forename = p.Forename,
-            Surname = p.Surname,
-            Email = p.Email,
-            IsActive = p.IsActive
+            Id = user.Id,
+            Forename = user.Forename,
+            Surname = user.Surname,
+            Email = user.Email,
+            IsActive = user.IsActive,
+            DateOfBirth = user.DateOfBirth
         });
 
-        return items;
+        if (isActive)
+            ViewData["Title"] = "Active Users";
+        else
+            ViewData["Title"] = "Non Active Users";
         
-        //ViewData["Title"] = isActive ? "Active Users" : "Inactive Users";
+        return items;
     }
 }
