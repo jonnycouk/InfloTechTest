@@ -1,19 +1,26 @@
 ﻿@model UserManagement.Models.User
 
+@{
+    var usersFullName = $"{Model.Forename ?? ""} {Model.Surname ?? ""}";
+}
+
+
 <div class="card">
-    <div class="card-header alert-primary">Create New User</div>
+    <div class="card-header alert-primary">Edit User</div>
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <p>Add a new user to the system. Please complete all the fields below.</p>
+                <p>You are editing details for @usersFullName.</p>
+                <p><strong>ID: @Model.Id</strong></p>
             </div>
 
             <div class="col-12 pt-3">
-                @using (Html.BeginForm("Create", "Users", FormMethod.Post))
+                
+                @using (Html.BeginForm("Update", "Users", FormMethod.Post))
                 {
+                    @Html.HiddenFor(x => x.Id)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
                     <div class="row">
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
@@ -48,14 +55,30 @@
                         </div>
                     </div>
 
+                    <div class="row m-2">
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+
+                                <div class="form-check form-switch mt-2">
+                                    @Html.CheckBoxFor(x => x.IsActive, new { @class = "form-check-input", role = "switch" })
+                                    <label class="form-check-label" for="@Html.IdFor(x => x.IsActive)">Set User As
+                                        Active</label>
+                                </div>
+
+                                @Html.ValidationMessageFor(x => x.IsActive, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    
                     <div class="row mt-4">
                         <div class="col-12">
                             <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                            <button type="submit" class="btn btn-success">Create User</button>
-                            <p class="small mt-3"><strong>Note:</strong> For security, new users are set as <code>NOT ACTIVE</code> by default. This status can be changed by editing the user from the User List screen.</p>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
                     </div>
                 }
+
             </div>
         </div>
     </div>

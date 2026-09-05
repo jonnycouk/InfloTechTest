@@ -18,7 +18,7 @@ public class UserService(IDataContext dataAccess) : IUserService
         return dataAccess.GetAll<User>().Where(user => user.IsActive == isActive).ToList();
     }
 
-    
+
     /// <summary>
     /// Returns all users regardless of active state
     /// </summary>
@@ -33,5 +33,10 @@ public class UserService(IDataContext dataAccess) : IUserService
     public User? GetById(long id)
     {
         return dataAccess.GetById<User>(id);
+    }
+
+    public void Update(User user)
+    {
+        dataAccess.Update(user);
     }
 }

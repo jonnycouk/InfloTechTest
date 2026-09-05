@@ -8,6 +8,37 @@ namespace UserManagement.WebMS.Controllers;
 [Route("users")]
 public class UsersController(IUserService userService) : Controller
 {
+    [HttpGet("Edit/{id:long}")]
+    public IActionResult Edit(long id)
+    {
+        var user = userService.GetById(id);
+
+        if (user == null)
+        {
+            return RedirectToAction("List");
+        }
+     
+        ViewData["Title"] = $"Edit User [{user.Id}]";
+        return View(user);
+    }
+    
+    [HttpPost("Update")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Update(User user)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Return view with validation errors
+            return View("Edit", user);
+        }
+        
+        ViewData["Title"] = "Edit";
+        userService.Update(user);
+        
+        return RedirectToAction("List");
+    }
+    
+    
     [HttpGet("View/{id:long}")]
     public IActionResult View(long id)
     {
@@ -19,6 +50,7 @@ public class UsersController(IUserService userService) : Controller
         }
      
         ViewData["Title"] = $"View User [{user.Id}]";
+        
         return View(user);
     }
     
@@ -37,20 +69,20 @@ public class UsersController(IUserService userService) : Controller
 
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(User newUser)
+    public IActionResult Create(User user)
     {
         if (!ModelState.IsValid)
         {
             // Return view with validation errors
-            return View(newUser);
+            return View(user);
         }
         
         ViewData["Title"] = "Create";
         
         // Enforce this in case it was changed in post
-        newUser.IsActive = false;
+        user.IsActive = false;
         
-        userService.Create(newUser);
+        userService.Create(user);
         
         return RedirectToAction("List");
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,5 +27,7 @@ public class User
     [Required(ErrorMessage = "Please provide a Date of Birth")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-    public DateTime DateOfBirth { get; set; } = new DateTime(2026, 1, 1);
+    
+    [DisplayName("Date of Birth")]
+    public DateTime DateOfBirth { get; set; } = new DateTime(DateTime.Now.AddYears(-16).Year, 1, 1); // Start age around 16 years old to work in UK
 }
