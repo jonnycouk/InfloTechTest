@@ -8,6 +8,30 @@ namespace UserManagement.WebMS.Controllers;
 [Route("users")]
 public class UsersController(IUserService userService) : Controller
 {
+    [HttpGet("Delete/{id:long}")]
+    public IActionResult Delete(long id)
+    {
+        var user = userService.GetById(id);
+
+        if (user == null)
+        {
+            return RedirectToAction("List");
+        }
+     
+        ViewData["Title"] = $"Delete User [{user.Id}]";
+        return View(user);
+    }
+    
+    [HttpPost("ConfirmDeletion")]
+    [ValidateAntiForgeryToken]
+    public IActionResult ConfirmDeletion(User user)
+    {
+        ViewData["Title"] = "Delete";
+        userService.Delete(user);
+        
+        return RedirectToAction("List");
+    }
+    
     [HttpGet("Edit/{id:long}")]
     public IActionResult Edit(long id)
     {

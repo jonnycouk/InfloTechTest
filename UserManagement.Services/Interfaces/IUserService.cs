@@ -36,4 +36,10 @@ public interface IUserService
     /// </summary>
     /// <param name="user"></param>
     void Update(User user);
+    
+    /// <summary>
+    /// Deleted given user
+    /// </summary>
+    /// <param name="user"></param>
+    void Delete(User user);
 }

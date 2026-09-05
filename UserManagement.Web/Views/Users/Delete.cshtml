@@ -1,0 +1,95 @@
+﻿@model UserManagement.Models.User
+
+@{
+    var usersFullName = $"{Model.Forename ?? ""} {Model.Surname ?? ""}";
+}
+
+
+<div class="card">
+    <div class="card-header alert-danger">Delete User</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <p>You are about to delete @usersFullName.</p>
+                <p><strong>ID: @Model.Id</strong></p>
+            </div>
+
+            <div class="card p-0">
+                <div class="card-header bg-warning">
+                    Warning
+                </div>
+                <div class="card-body">
+                    <p><strong>This action will permenantly delete @usersFullName's record. They will will be unable to log in or access their account.</strong></p>
+                    
+                    @if (Model.IsActive)
+                    {
+                        <p>If this is intended to be a temporary action, you can disable their account by <a href="/Users/Edit/@Model.Id" title="Set account active status for @usersFullName">clicking here</a> instead.</p>
+                    }
+                    
+                </div>
+            </div>
+            
+            <div class="col-12 pt-5">
+            @using (Html.BeginForm("ConfirmDeletion", "Users", FormMethod.Post))
+            {
+                @Html.HiddenFor(x => x.Id)
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Forename, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.Forename, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.Forename, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Surname, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.Surname, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.Email, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
+                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.DateOfBirth, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.DateOfBirth, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                            @Html.ValidationMessageFor(x => x.DateOfBirth, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-2">
+                    <div class="col-12" disabled="disabled">
+                        @if (Model.IsActive)
+                        {
+                            <p><span><img src="~/assets/glyphs/true.png" title="Active" alt="Active"/></span><code><strong>&nbsp;Active</strong></code></p>
+                        }
+                        else
+                        {
+                            <p><span><img src="~/assets/glyphs/false.png" title="Not Active" alt="Not Active"/></span><code>&nbsp;Not Active</code></p>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
+                        <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
+                        <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                    </div>
+                </div>
+            }
+            </div>
+        </div>
+    </div>
+</div>

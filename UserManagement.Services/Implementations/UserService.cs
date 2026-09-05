@@ -39,4 +39,9 @@ public class UserService(IDataContext dataAccess) : IUserService
     {
         dataAccess.Update(user);
     }
+
+    public void Delete(User user)
+    {
+        dataAccess.Delete(user);
+    }
 }
