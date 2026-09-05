@@ -1,5 +1,10 @@
 ﻿@model UserManagement.Web.Models.Users.UserListViewModel
 
+@{
+    int activeUserCount = 0;
+    int inactiveUserCount = 0;
+}
+
 <h2>User List (@Model.Items.Count users)</h2>
 
 <!-- Moved filter/menu to the top so users don't have to chase it up and down the screen when the records show -->
@@ -13,65 +18,90 @@
     </div>
 </div>
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Id</th>
-            <th>Forename</th>
-            <th>Surname</th>
-            <th>Date Of Birth</th>
-            <th>Email</th>
-            <th>Account Active</th>
-            <th>Actions</th>
-            <th style="width: 1px;"></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>
-                    @item.Id
-                </td>
-                <td>
-                    @item.Forename
-                </td>
-                <td>
-                    @item.Surname
-                </td>
-                <td>
-                    @item.DateOfBirth.ToString("dd MMM yyyy")
-                </td>
-                <td>
-                    @item.Email
-                </td>
-                <td>
-                    @if (item.IsActive)
+<div class="card p-0 mt-2">
+    <div class="card-header alert-primary">
+        User List (@Model.Items.Count users)
+    </div>
+
+    <div class="card-body mt-2">
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Forename</th>
+                    <th>Surname</th>
+                    <th>Date Of Birth</th>
+                    <th>Email</th>
+                    <th>Account Active</th>
+                    <th>Actions</th>
+                    <th style="width: 1px;"></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    if (item.IsActive)
                     {
-                        <img src="~/assets/glyphs/true.png" alt="Yes" title="Yes"/>
-                    }
-                    else
-                    {
-                        <img src="~/assets/glyphs/false.png" alt="No" title="No"/>
+                        activeUserCount++;
                     }
 
-                </td>
-                <td>
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false" id="btnToggleActions">
-                            Actions
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-                            <li><a class="dropdown-item" href="/Users/View/@item.Id">View</a></li>
-                            <li><a class="dropdown-item" href="/Users/Edit/@item.Id">Edit</a></li>
-                            <li><a class="dropdown-item" href="/Users/Delete/@item.Id">Delete</a></li>
-                        </ul>
-                    </div>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                    if (!item.IsActive)
+                    {
+                        inactiveUserCount++;
+                    }
+
+                    <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Forename
+                        </td>
+                        <td>
+                            @item.Surname
+                        </td>
+                        <td>
+                            @item.DateOfBirth.ToString("dd MMM yyyy")
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @if (item.IsActive)
+                            {
+                                <img src="~/assets/glyphs/true.png" alt="Yes" title="Yes"/>
+                            }
+                            else
+                            {
+                                <img src="~/assets/glyphs/false.png" alt="No" title="No"/>
+                            }
+
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false" id="btnToggleActions">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
+                                <li><a class="dropdown-item" href="/Users/View/@item.Id"><img src="~/assets/glyphs/user-view-16x16.png"/>&nbsp; &nbsp;View</a></li>
+                                    <li><a class="dropdown-item" href="/Users/Edit/@item.Id"><img src="~/assets/glyphs/user-edit-16x16.png"/> &nbsp; &nbsp;Edit</a></li>
+                                    <li><a class="dropdown-item" href="/Users/Delete/@item.Id"><img src="~/assets/glyphs/user-delete-16x16.png"/>&nbsp; &nbsp;Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="card-footer bg-info bg-opacity-10">
+            Quick Stats: <strong>Active Users: <code>@activeUserCount</code></strong> | Inactive Users: <code>@inactiveUserCount</code>
+        </div>
+    </div>
+
 </div>
