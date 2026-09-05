@@ -29,4 +29,9 @@ public class UserService(IDataContext dataAccess) : IUserService
     {
         dataAccess.Create(user);
     }
+
+    public User? GetById(long id)
+    {
+        return dataAccess.GetById<User>(id);
+    }
 }

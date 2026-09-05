@@ -8,6 +8,20 @@ namespace UserManagement.WebMS.Controllers;
 [Route("users")]
 public class UsersController(IUserService userService) : Controller
 {
+    [HttpGet("View/{id:long}")]
+    public IActionResult View(long id)
+    {
+        var user = userService.GetById(id);
+
+        if (user == null)
+        {
+            return RedirectToAction("List");
+        }
+     
+        ViewData["Title"] = $"View User [{user.Id}]";
+        return View(user);
+    }
+    
     [HttpGet("Create")]
     public ViewResult Create()
     {

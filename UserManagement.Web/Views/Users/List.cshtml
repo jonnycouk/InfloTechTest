@@ -11,7 +11,6 @@
         <a asp-controller="Users" asp-action="List" asp-route-isActive="false" class="btn btn-default btn-outline-secondary">Non Active</a>
         <a asp-controller="Users" asp-action="Create" class="btn btn-default btn-primary" style="margin-left: 20px">Add User</a>
     </div>
-
 </div>
 
 <div class="table-responsive">
@@ -65,7 +64,7 @@
                             Actions
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-                            <li><a class="dropdown-item" href="#">View</a></li>
+                            <li><a class="dropdown-item" href="/Users/View/@item.Id">View</a></li>
                             <li><a class="dropdown-item" href="#">Edit</a></li>
                             <li><a class="dropdown-item" href="#">Delete</a></li>
                         </ul>
