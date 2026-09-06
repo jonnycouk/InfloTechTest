@@ -1,3 +1,7 @@
+@{
+    var appIcon = $"../../assets/images/{ViewData["AppIcon"] ?? "people.gif"}" ;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,13 +47,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Users" asp-action="List">Users</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Logs" asp-action="List">Logs</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
         
         <div class="p-2">
-            <img src="~/assets/images/people.gif" style="width: 64px" title="Inflo" alt="Inflo"/> &nbsp; <img src="~/assets/images/inflo-logo-98x40.png" title="Inflo" alt="Inflo"/>
+            <img src="@appIcon" style="width: 64px" title="Inflo" alt="Inflo"/> &nbsp; <img src="~/assets/images/inflo-logo-98x40.png" title="Inflo" alt="Inflo"/>
             <p class="small"><strong>Science | Ownership | Openness | Agility</strong></p>
         </div>
         

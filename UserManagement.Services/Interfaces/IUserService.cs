@@ -30,6 +30,13 @@ public interface IUserService
     /// <param name="id"></param>
     /// <returns></returns>
     User? GetById(long id);
+
+    /// <summary>
+    /// Returns a detached/non-tracked entity
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    User? GetDetachedEntityById(long id);
     
     /// <summary>
     /// Update given user 

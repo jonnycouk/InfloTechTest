@@ -74,7 +74,12 @@
                     <div class="row mt-4">
                         <div class="col-12">
                             <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            
+                            @if (Model.Id != 1)
+                            {
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                            }
+                            
                         </div>
                     </div>
                 }

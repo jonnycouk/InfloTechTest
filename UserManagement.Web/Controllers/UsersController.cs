@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Web;
 using UserManagement.Web.Models.Users;
 
 namespace UserManagement.WebMS.Controllers;
 
 [Route("users")]
-public class UsersController(IUserService userService) : Controller
+public class UsersController(IUserService userService, ILogService logService) : Controller
 {
     [HttpGet("Delete/{id:long}")]
     public IActionResult Delete(long id)
@@ -17,8 +18,10 @@ public class UsersController(IUserService userService) : Controller
         {
             return RedirectToAction("List");
         }
-     
+        
         ViewData["Title"] = $"Delete User [{user.Id}]";
+        
+        logService.Create(new Log { Summary = SystemLogEntry.DeleteUserAccountOpened,  AffectedUser = user});
         return View(user);
     }
     
@@ -27,8 +30,10 @@ public class UsersController(IUserService userService) : Controller
     public IActionResult ConfirmDeletion(User user)
     {
         ViewData["Title"] = "Delete";
-        userService.Delete(user);
         
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"USER: {Json(user)}" });
+
+        userService.Delete(user);
         return RedirectToAction("List");
     }
     
@@ -43,6 +48,8 @@ public class UsersController(IUserService userService) : Controller
         }
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
+        
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountOpenedToEdit,  Detail = $"{user.Forename} {user.Surname} (ID: {user.Id})", AffectedUser = user });
         return View(user);
     }
     
@@ -57,7 +64,12 @@ public class UsersController(IUserService userService) : Controller
         }
         
         ViewData["Title"] = "Edit";
+        
+        var oldUser = userService.GetDetachedEntityById(user.Id);
         userService.Update(user);
+        
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"OLD VALUE: {Json(oldUser)}"});
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"NEW VALUE: {Json(user)}"});
         
         return RedirectToAction("List");
     }
@@ -75,6 +87,7 @@ public class UsersController(IUserService userService) : Controller
      
         ViewData["Title"] = $"View User [{user.Id}]";
         
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = user });
         return View(user);
     }
     
@@ -108,12 +121,16 @@ public class UsersController(IUserService userService) : Controller
         
         userService.Create(user);
         
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = user });
         return RedirectToAction("List");
     }
     
     [HttpGet("List")]
     public ViewResult List(bool? isActive)
     {
+        ViewData["AppIcon"] = "people.gif";
+        logService.Create(new Log { Summary = SystemLogEntry.UserListViewed });
+        
         IEnumerable<UserListItemViewModel> items;
         
         if (isActive.HasValue)
@@ -156,9 +173,15 @@ public class UsersController(IUserService userService) : Controller
         });
 
         if (isActive)
+        {
             ViewData["Title"] = "Active Users";
+            logService.Create(new Log { Summary = SystemLogEntry.ActiveUsersFilterApplied });
+        }
         else
+        { 
             ViewData["Title"] = "Non Active Users";
+            logService.Create(new Log { Summary = SystemLogEntry.NonActiveUsersFilterApplied });
+        }
         
         return items;
     }

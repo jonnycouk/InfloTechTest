@@ -1,0 +1,52 @@
+﻿@model UserManagement.Web.Models.Logs.LogListViewModel
+
+<h2>Log Viewer (@Model.Items.Count entries)</h2>
+
+
+<div class="card p-0 mt-2">
+    <div class="card-header alert-primary">
+        Log Viewer (@Model.Items.Count entries)
+    </div>
+
+    <div class="card-body mt-2">
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Summary</th>
+                    <th>Detail</th>
+                    <th>Date/Time</th>
+                    <th>Affected ID</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Items)
+                {
+                   <tr>
+                        <td>
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.Summary
+                        </td>
+                        <td>
+                            <a href="/Logs/View/@item.Id" title="View full log entry" class="btn btn-outline-secondary">View Detail</a>
+                        </td>
+                        <td>
+                            @item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss")
+                        </td>
+                        <td>
+                            @item.AffectedUserId
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

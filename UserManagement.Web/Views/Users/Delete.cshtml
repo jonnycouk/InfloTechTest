@@ -19,7 +19,7 @@
                     Warning
                 </div>
                 <div class="card-body">
-                    <p><strong>This action will permenantly delete @usersFullName's record. They will will be unable to log in or access their account.</strong></p>
+                    <p><strong>This action will permanently delete @usersFullName's record. They will will be unable to log in or access their account.</strong></p>
                     
                     @if (Model.IsActive)
                     {
@@ -84,8 +84,13 @@
                 <div class="row mt-4">
                     <div class="col-12">
                         <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                        <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
-                        <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                        
+                        @if (Model.Id != 1)
+                        {
+                            <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
+                            <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                        }
+
                     </div>
                 </div>
             }

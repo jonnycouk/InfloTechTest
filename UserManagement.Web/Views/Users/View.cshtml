@@ -69,8 +69,13 @@
                     <div class="user-menu-buttons">
                         <div class="btn-group" role="group">
                             <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                            <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
-                            <a href="/Users/Delete/@Model.Id" class="btn btn-danger m-2" title="Delete @usersFullName">Delete User</a>
+                            
+                            @if (Model.Id != 1)
+                            {
+                                <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
+                                <a href="/Users/Delete/@Model.Id" class="btn btn-danger m-2" title="Delete @usersFullName">Delete User</a>
+                            }
+                            
                         </div>
                     </div>
                     

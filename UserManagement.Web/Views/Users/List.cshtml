@@ -86,9 +86,14 @@
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="btnToggleActions">
-                                <li><a class="dropdown-item" href="/Users/View/@item.Id"><img src="~/assets/glyphs/user-view-16x16.png"/>&nbsp; &nbsp;View</a></li>
-                                    <li><a class="dropdown-item" href="/Users/Edit/@item.Id"><img src="~/assets/glyphs/user-edit-16x16.png"/> &nbsp; &nbsp;Edit</a></li>
-                                    <li><a class="dropdown-item" href="/Users/Delete/@item.Id"><img src="~/assets/glyphs/user-delete-16x16.png"/>&nbsp; &nbsp;Delete</a></li>
+                                    <li><a class="dropdown-item" href="/Users/View/@item.Id"><img src="~/assets/glyphs/user-view-16x16.png"/>&nbsp; &nbsp;View</a></li>
+                            
+                                    @if (item.Id != 1)
+                                    {
+                                        <li><a class="dropdown-item" href="/Users/Edit/@item.Id"><img src="~/assets/glyphs/user-edit-16x16.png"/> &nbsp; &nbsp;Edit</a></li>
+                                        <li><a class="dropdown-item" href="/Users/Delete/@item.Id"><img src="~/assets/glyphs/user-delete-16x16.png"/>&nbsp; &nbsp;Delete</a></li>
+                                    }
+                                    
                                 </ul>
                             </div>
                         </td>

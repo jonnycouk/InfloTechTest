@@ -35,6 +35,11 @@ public class UserService(IDataContext dataAccess) : IUserService
         return dataAccess.GetById<User>(id);
     }
 
+    public User? GetDetachedEntityById(long id)
+    {
+        return dataAccess.GetByIdNoTracking<User>(id);
+    }
+
     public void Update(User user)
     {
         dataAccess.Update(user);
