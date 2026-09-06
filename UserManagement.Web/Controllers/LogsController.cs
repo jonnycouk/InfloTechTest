@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Models.Logs;
-using UserManagement.Web.Models.Users;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -30,6 +29,16 @@ public class LogsController(ILogService logService) : Controller
             Items = items.ToList()
         };
         
+        return View(model);
+    }
+    
+    [HttpGet]
+    public ViewResult View(long id)
+    {
+        ViewData["AppIcon"] = "eye.gif";
+        ViewData["Title"] = "Log Viewer";
+        
+        var model = logService.GetById(id);
         return View(model);
     }
 }

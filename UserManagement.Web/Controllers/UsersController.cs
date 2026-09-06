@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text.Json;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web;
@@ -31,7 +33,8 @@ public class UsersController(IUserService userService, ILogService logService) :
     {
         ViewData["Title"] = "Delete";
         
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"USER: {Json(user)}" });
+        string jsonDetail = JsonSerializer.Serialize(user);
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"USER: {jsonDetail}" });
 
         userService.Delete(user);
         return RedirectToAction("List");
@@ -65,11 +68,11 @@ public class UsersController(IUserService userService, ILogService logService) :
         
         ViewData["Title"] = "Edit";
         
-        var oldUser = userService.GetDetachedEntityById(user.Id);
+        var previousUserDetail = userService.GetDetachedEntityById(user.Id);
         userService.Update(user);
         
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"OLD VALUE: {Json(oldUser)}"});
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"NEW VALUE: {Json(user)}"});
+        string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
         
         return RedirectToAction("List");
     }

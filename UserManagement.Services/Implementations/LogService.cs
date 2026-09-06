@@ -25,12 +25,12 @@ public class LogService(IDataContext dataAccess) : ILogService
         dataAccess.Create(log);
     }
 
-    public User? GetById(long id)
+    public Log? GetById(long id)
     {
-        throw new System.NotImplementedException();
+        return dataAccess.GetById<Log>(id);
     }
 
-    public User? GetByUserId(long id)
+    public Log? GetByUserId(long id)
     {
         throw new System.NotImplementedException();
     }
