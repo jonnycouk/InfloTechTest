@@ -13,7 +13,7 @@ public class LogsController(ILogService logService) : Controller
         ViewData["Title"] = "Log Viewer";
         IEnumerable<LogListItemViewModel> items;
         
-        items = logService.GetAll(0, 50).Select(user => new LogListItemViewModel
+        items = logService.GetAll(0, 100).Select(user => new LogListItemViewModel
         {
             Id = user.Id,
             Summary = user.Summary,

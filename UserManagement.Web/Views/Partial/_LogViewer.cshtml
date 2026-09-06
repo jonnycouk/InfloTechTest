@@ -1,6 +1,6 @@
 ﻿@model List<UserManagement.Web.Models.Logs.LogListItemViewModel>
 
-<h2>Log Viewer (@Model.Count entries)</h2>
+<h2>Log Viewer</h2>
 
 <div class="card p-0 mt-2">
     <div class="card-header alert-primary">
@@ -24,9 +24,9 @@
                 @foreach (var item in Model)
                 {
                     var timeSpan = DateTime.UtcNow - item.CreateUtc;
-                    var displayTime = timeSpan.TotalSeconds < 20 && timeSpan.TotalSeconds >= 0
+                    var displayTime = timeSpan.TotalSeconds < 10 && timeSpan.TotalSeconds >= 0
                         ? "Just Now"
-                        : item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss");
+                        : item.CreateUtc.ToString("dd MMM yyyy HH:mm:ss");
                     
                    <tr>
                         <td>
@@ -39,7 +39,7 @@
                             <a href="/Logs/View/@item.Id" title="View full log entry" class="btn btn-outline-secondary">View Detail</a>
                         </td>
                         <td>
-                            <span title="@item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss")">
+                            <span title="@item.CreateUtc.ToString("dd MMM yyyy HH:mm:ss")">
                                 @displayTime
                             </span>
                         </td>

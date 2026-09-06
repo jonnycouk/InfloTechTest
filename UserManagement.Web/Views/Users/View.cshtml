@@ -102,8 +102,8 @@
                 }
                 else if (Model.Logs != null && Model.Logs.Count > 0)
                 {
-                    <p mb-3>Showing the last @Model.MaxLogCount logs.</p>
                     <partial name="~/Views/Partial/_LogViewer.cshtml" model="Model.Logs"/>
+                    <p class="small mt-3">Showing the last @Model.MaxLogCount logs.</p>
                 }
                 else
                 {
