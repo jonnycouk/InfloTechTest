@@ -8,8 +8,8 @@ public static class SystemLogEntry
     public const string LogViewerOpened = "Log Viewer Opened";
     
     // User Logs
-    public const string UserListViewed = "User List Viewed";
-    public const string UserAccountViewed = "User Account Deleted";
+    public const string UserListViewed = "User List Viewed (All Users)";
+    public const string UserAccountViewed = "User Account Viewed";
     public const string UserAccountDeleted = "User Account Deleted";
     public const string UserAccountOpenedToEdit = "User Account Edit Screen Opened";
     public const string UserAccountEdited = "User Account Edit Edited";

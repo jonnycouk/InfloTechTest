@@ -30,6 +30,11 @@ public class LogService(IDataContext dataAccess) : ILogService
         return dataAccess.GetById<Log>(id);
     }
 
+    public IEnumerable<Log>? GetByAffectedUserId(long id)
+    {
+        return dataAccess.GetAll<Log>().Where(l => l.AffectedUserId == id).ToList();
+    }
+
     public Log? GetByUserId(long id)
     {
         throw new System.NotImplementedException();

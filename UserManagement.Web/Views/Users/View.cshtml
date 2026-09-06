@@ -1,9 +1,8 @@
-﻿@model UserManagement.Models.User
+﻿@model UserManagement.Web.ViewModels.UserViewModel
 
 @{
-    var usersFullName = $"{Model.Forename ?? ""} {Model.Surname ?? ""}";
+    var usersFullName = $"{Model.User.Forename ?? ""} {Model.User.Surname ?? ""}";
 }
-
 
 <div class="card">
     <div class="card-header alert-primary">View User</div>
@@ -11,7 +10,7 @@
         <div class="row">
             <div class="col-12">
                 <p>You are viewing details for @usersFullName.</p>
-                <p><strong>ID: @Model.Id</strong></p>
+                <p><strong>ID: @Model.User.Id</strong></p>
             </div>
 
             <div class="col-12 pt-3">
@@ -19,67 +18,97 @@
                 <div class="row">
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="form-group">
-                            @Html.LabelFor(x => x.Forename, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Forename, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
-                            @Html.ValidationMessageFor(x => x.Forename, "", new { @class = "text-danger" })
+                            @Html.LabelFor(x => x.User.Forename, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.Forename, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.User.Forename, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="form-group">
-                            @Html.LabelFor(x => x.Surname, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Surname, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
-                            @Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
+                            @Html.LabelFor(x => x.User.Surname, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.Surname, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.User.Surname, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="form-group">
-                            @Html.LabelFor(x => x.Email, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
-                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                            @Html.LabelFor(x => x.User.Email, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
+                            @Html.ValidationMessageFor(x => x.User.Email, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="form-group">
-                            @Html.LabelFor(x => x.DateOfBirth, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.DateOfBirth, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
-                            @Html.ValidationMessageFor(x => x.DateOfBirth, "", new { @class = "text-danger" })
+                            @Html.LabelFor(x => x.User.DateOfBirth, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.DateOfBirth, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                            @Html.ValidationMessageFor(x => x.User.DateOfBirth, "", new { @class = "text-danger" })
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row m-2">
                     <div class="col-12">
-                        @if (Model.IsActive)
+                        @if (Model.User.IsActive)
                         {
-                            <p><span><img src="~/assets/glyphs/true.png" title="Active" alt="Active"/></span><code><strong>&nbsp;Active</strong></code></p>
+                            <p><span><img src="~/assets/glyphs/true.png" title="Active"
+                                          alt="Active"/></span><code><strong>&nbsp;Active</strong></code></p>
                         }
                         else
                         {
-                            <p><span><img src="~/assets/glyphs/false.png" title="Not Active" alt="Not Active"/></span><code>&nbsp;Not Active</code></p>
+                            <p><span><img src="~/assets/glyphs/false.png" title="Not Active"
+                                          alt="Not Active"/></span><code>&nbsp;Not Active</code></p>
                         }
-  
+
                     </div>
                 </div>
-                
+
                 <div class="row mt-4">
-                    
+
                     <div class="user-menu-buttons">
                         <div class="btn-group" role="group">
-                            <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                            
-                            @if (Model.Id != 1)
+                            <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to
+                                List</a>
+
+                            @if (Model.User.Id != 1)
                             {
-                                <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
-                                <a href="/Users/Delete/@Model.Id" class="btn btn-danger m-2" title="Delete @usersFullName">Delete User</a>
+                                <a href="/Users/Edit/@Model.User.Id" class="btn btn-primary m-2"
+                                   title="Edit user details for @usersFullName">Edit User</a>
+                                <a href="/Users/Delete/@Model.User.Id" class="btn btn-danger m-2"
+                                   title="Delete @usersFullName">Delete User</a>
                             }
-                            
+
                         </div>
                     </div>
-                    
+
                 </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-5">
+    <div class="card-header alert-secondary">User History</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 pt-3">
+
+                @if (Model.Logs != null && Model.User.Id == 1)
+                {
+                    <p mb-3>You do not have permission to view the System User log history.</p>
+                }
+                else if (Model.Logs != null && Model.Logs.Count > 0)
+                {
+                    <p mb-3>Showing the last @Model.MaxLogCount logs.</p>
+                    <partial name="~/Views/Partial/_LogViewer.cshtml" model="Model.Logs"/>
+                }
+                else
+                {
+                    <p>No logs to show.</p>
+                }
 
             </div>
         </div>

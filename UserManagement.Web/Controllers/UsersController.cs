@@ -4,7 +4,9 @@ using System.Text.Json;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web;
+using UserManagement.Web.Models.Logs;
 using UserManagement.Web.Models.Users;
+using UserManagement.Web.ViewModels;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -33,8 +35,9 @@ public class UsersController(IUserService userService, ILogService logService) :
     {
         ViewData["Title"] = "Delete";
         
-        string jsonDetail = JsonSerializer.Serialize(user);
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"USER: {jsonDetail}" });
+        var previousUserDetail = userService.GetDetachedEntityById(user.Id);
+        string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
+        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
 
         userService.Delete(user);
         return RedirectToAction("List");
@@ -52,7 +55,7 @@ public class UsersController(IUserService userService, ILogService logService) :
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountOpenedToEdit,  Detail = $"{user.Forename} {user.Surname} (ID: {user.Id})", AffectedUser = user });
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
         return View(user);
     }
     
@@ -73,7 +76,7 @@ public class UsersController(IUserService userService, ILogService logService) :
         
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
-        
+
         return RedirectToAction("List");
     }
     
@@ -81,17 +84,38 @@ public class UsersController(IUserService userService, ILogService logService) :
     [HttpGet("View/{id:long}")]
     public IActionResult View(long id)
     {
-        var user = userService.GetById(id);
-
+        var logCount = 20;
+        
+        var vm = new UserViewModel { MaxLogCount = logCount };
+        var user = userService.GetById(id); 
+        
         if (user == null)
         {
             return RedirectToAction("List");
         }
-     
+        
+        vm.User = user;
         ViewData["Title"] = $"View User [{user.Id}]";
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = user });
-        return View(user);
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = vm.User });
+        
+        var items = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<Log>())
+            .Take(logCount)
+            .OrderByDescending(l => l.Id)
+            .Select(user => new LogListItemViewModel
+        {
+            Id = user.Id,
+            Summary = user.Summary,
+            CreateUtc = user.CreatedUtc,
+            User = user.User,
+            UserId =  user.UserId,
+            AffectedUser =  user.AffectedUser,
+            AffectedUserId = user.AffectedUserId,
+        });
+
+        vm.Logs = items.ToList();
+        
+        return View(vm);
     }
     
     [HttpGet("Create")]

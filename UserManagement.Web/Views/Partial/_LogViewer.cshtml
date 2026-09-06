@@ -1,11 +1,10 @@
-﻿@model UserManagement.Web.Models.Logs.LogListViewModel
+﻿@model List<UserManagement.Web.Models.Logs.LogListItemViewModel>
 
-<h2>Log Viewer (@Model.Items.Count entries)</h2>
-
+<h2>Log Viewer (@Model.Count entries)</h2>
 
 <div class="card p-0 mt-2">
     <div class="card-header alert-primary">
-        Log Viewer (@Model.Items.Count entries)
+        Log Viewer (@Model.Count entries)
     </div>
 
     <div class="card-body mt-2">
@@ -22,8 +21,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var item in Model.Items)
+                @foreach (var item in Model)
                 {
+                    var timeSpan = DateTime.UtcNow - item.CreateUtc;
+                    var displayTime = timeSpan.TotalSeconds < 20 && timeSpan.TotalSeconds >= 0
+                        ? "Just Now"
+                        : item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss");
+                    
                    <tr>
                         <td>
                             @item.Id
@@ -35,10 +39,16 @@
                             <a href="/Logs/View/@item.Id" title="View full log entry" class="btn btn-outline-secondary">View Detail</a>
                         </td>
                         <td>
-                            @item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss")
+                            <span title="@item.CreateUtc.ToString("dd MMM yyyy at HH:mm:ss")">
+                                @displayTime
+                            </span>
                         </td>
                         <td>
-                            @item.AffectedUserId
+                            @if (item.AffectedUserId != null)
+                            {
+                                <a href="/Users/View/@item.AffectedUserId" class="btn btn-outline-secondary">@item.AffectedUserId</a>
+                            }
+
                         </td>
                     </tr>
                 }
