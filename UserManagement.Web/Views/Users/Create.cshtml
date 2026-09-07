@@ -33,6 +33,22 @@
 
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
+                                @Html.LabelFor(user => user.Organisation, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Organisation, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.Organisation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.JobTitle, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.JobTitle, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
                                 @Html.LabelFor(x => x.Email, new { @class = "form-label required-label" })
                                 @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", type = "email" } })
                                 @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })

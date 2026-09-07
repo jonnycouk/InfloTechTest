@@ -19,81 +19,104 @@
                     Warning
                 </div>
                 <div class="card-body">
-                    <p><strong>This action will permanently delete @usersFullName's record. They will will be unable to log in or access their account.</strong></p>
-                    
+                    <p><strong>This action will permanently delete @usersFullName's record. They will will be unable to
+                            log in or access their account.</strong></p>
+
                     @if (Model.IsActive)
                     {
-                        <p>If this is intended to be a temporary action, you can disable their account by <a href="/Users/Edit/@Model.Id" title="Set account active status for @usersFullName">clicking here</a> instead.</p>
+                        <p>If this is intended to be a temporary action, you can disable their account by <a
+                                href="/Users/Edit/@Model.Id" title="Set account active status for @usersFullName">clicking
+                                here</a> instead.</p>
                     }
-                    
+
                 </div>
             </div>
-            
+
             <div class="col-12 pt-5">
-            @using (Html.BeginForm("ConfirmDeletion", "Users", FormMethod.Post))
-            {
-                @Html.HiddenFor(x => x.Id)
-                <div class="row">
-                    <div class="col-md-6 col-sm-12 mb-3">
-                        <div class="form-group">
-                            @Html.LabelFor(x => x.Forename, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Forename, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
-                            @Html.ValidationMessageFor(x => x.Forename, "", new { @class = "text-danger" })
+                @using (Html.BeginForm("ConfirmDeletion", "Users", FormMethod.Post))
+                {
+                    @Html.HiddenFor(user => user.Id)
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.Forename, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Forename, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                @Html.ValidationMessageFor(user => user.Forename, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.Surname, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Surname, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                @Html.ValidationMessageFor(user => user.Surname, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.Organisation, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Organisation, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                @Html.ValidationMessageFor(user => user.Organisation, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.JobTitle, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.JobTitle, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                @Html.ValidationMessageFor(user => user.JobTitle, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.Email, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
+                                @Html.ValidationMessageFor(user => user.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.DateOfBirth, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.DateOfBirth, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(user => user.DateOfBirth, "", new { @class = "text-danger" })
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-12 mb-3">
-                        <div class="form-group">
-                            @Html.LabelFor(x => x.Surname, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Surname, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
-                            @Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
+                    <div class="row m-2">
+                        <div class="col-12" disabled="disabled">
+                            @if (Model.IsActive)
+                            {
+                                <p><span><img src="~/assets/glyphs/true.png" title="Active"
+                                              alt="Active"/></span><code><strong>&nbsp;Active</strong></code></p>
+                            }
+                            else
+                            {
+                                <p><span><img src="~/assets/glyphs/false.png" title="Not Active"
+                                              alt="Not Active"/></span><code>&nbsp;Not Active</code></p>
+                            }
+
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-sm-12 mb-3">
-                        <div class="form-group">
-                            @Html.LabelFor(x => x.Email, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
-                            @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to
+                                List</a>
+
+                            @if (Model.Id != 1)
+                            {
+                                <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2"
+                                   title="Edit user details for @usersFullName">Edit User</a>
+                                <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+                            }
+
                         </div>
                     </div>
-
-                    <div class="col-md-6 col-sm-12 mb-3">
-                        <div class="form-group">
-                            @Html.LabelFor(x => x.DateOfBirth, new { @class = "form-label required-label" })
-                            @Html.EditorFor(x => x.DateOfBirth, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
-                            @Html.ValidationMessageFor(x => x.DateOfBirth, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row m-2">
-                    <div class="col-12" disabled="disabled">
-                        @if (Model.IsActive)
-                        {
-                            <p><span><img src="~/assets/glyphs/true.png" title="Active" alt="Active"/></span><code><strong>&nbsp;Active</strong></code></p>
-                        }
-                        else
-                        {
-                            <p><span><img src="~/assets/glyphs/false.png" title="Not Active" alt="Not Active"/></span><code>&nbsp;Not Active</code></p>
-                        }
-
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <a href="/Users/List" class="btn btn-outline-secondary m-2" title="Back to List">Back to List</a>
-                        
-                        @if (Model.Id != 1)
-                        {
-                            <a href="/Users/Edit/@Model.Id" class="btn btn-primary m-2" title="Edit user details for @usersFullName">Edit User</a>
-                            <button type="submit" class="btn btn-danger">Confirm Deletion</button>
-                        }
-
-                    </div>
-                </div>
-            }
+                }
             </div>
         </div>
     </div>

@@ -34,6 +34,22 @@
 
                     <div class="col-md-6 col-sm-12 mb-3">
                         <div class="form-group">
+                            @Html.LabelFor(x => x.User.Organisation, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.Organisation, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.User.Organisation, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
+                            @Html.LabelFor(x => x.User.JobTitle, new { @class = "form-label required-label" })
+                            @Html.EditorFor(x => x.User.JobTitle, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                            @Html.ValidationMessageFor(x => x.User.JobTitle, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-sm-12 mb-3">
+                        <div class="form-group">
                             @Html.LabelFor(x => x.User.Email, new { @class = "form-label required-label" })
                             @Html.EditorFor(x => x.User.Email, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", type = "email" } })
                             @Html.ValidationMessageFor(x => x.User.Email, "", new { @class = "text-danger" })

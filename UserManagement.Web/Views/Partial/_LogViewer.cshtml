@@ -23,10 +23,10 @@
                 <tbody>
                 @foreach (var item in Model)
                 {
-                    var timeSpan = DateTime.UtcNow - item.CreateUtc;
+                    var timeSpan = DateTime.UtcNow - item.CreatedUtc;
                     var displayTime = timeSpan.TotalSeconds < 10 && timeSpan.TotalSeconds >= 0
                         ? "Just Now"
-                        : item.CreateUtc.ToString("dd MMM yyyy HH:mm:ss");
+                        : item.CreatedUtc.ToString("dd MMM yyyy HH:mm:ss");
                     
                    <tr>
                         <td>
@@ -39,7 +39,7 @@
                             <a href="/Logs/View/@item.Id" title="View full log entry" class="btn btn-outline-secondary">View Detail</a>
                         </td>
                         <td>
-                            <span title="@item.CreateUtc.ToString("dd MMM yyyy HH:mm:ss")">
+                            <span title="@item.CreatedUtc.ToString("dd MMM yyyy HH:mm:ss")">
                                 @displayTime
                             </span>
                         </td>

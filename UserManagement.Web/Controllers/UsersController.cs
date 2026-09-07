@@ -4,14 +4,14 @@ using System.Text.Json;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web;
-using UserManagement.Web.Models.Logs;
+using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
 using UserManagement.Web.ViewModels;
 
 namespace UserManagement.WebMS.Controllers;
 
 [Route("users")]
-public class UsersController(IUserService userService, ILogService logService) : Controller
+public class UsersController(IUserService userService, ILogService logService, LogMapper logMapper, UserMapper userMapper) : Controller
 {
     [HttpGet("Delete/{id:long}")]
     public IActionResult Delete(long id)
@@ -19,9 +19,7 @@ public class UsersController(IUserService userService, ILogService logService) :
         var user = userService.GetById(id);
 
         if (user == null)
-        {
             return RedirectToAction("List");
-        }
         
         ViewData["Title"] = $"Delete User [{user.Id}]";
         
@@ -35,6 +33,7 @@ public class UsersController(IUserService userService, ILogService logService) :
     {
         ViewData["Title"] = "Delete";
         
+        // Retrieve non-tracked entity before deletion and store it for audit purposes
         var previousUserDetail = userService.GetDetachedEntityById(user.Id);
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
@@ -49,9 +48,7 @@ public class UsersController(IUserService userService, ILogService logService) :
         var user = userService.GetById(id);
 
         if (user == null)
-        {
             return RedirectToAction("List");
-        }
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
         
@@ -71,9 +68,9 @@ public class UsersController(IUserService userService, ILogService logService) :
         
         ViewData["Title"] = "Edit";
         
+        // Retrieve non-tracked entity before update and store it for audit purposes
         var previousUserDetail = userService.GetDetachedEntityById(user.Id);
         userService.Update(user);
-        
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
 
@@ -99,22 +96,13 @@ public class UsersController(IUserService userService, ILogService logService) :
         
         logService.Create(new Log { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = vm.User });
         
-        var items = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<Log>())
-            .Take(logCount)
+        var logEntries = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<Log>())
             .OrderByDescending(l => l.Id)
-            .Select(user => new LogListItemViewModel
-        {
-            Id = user.Id,
-            Summary = user.Summary,
-            CreateUtc = user.CreatedUtc,
-            User = user.User,
-            UserId =  user.UserId,
-            AffectedUser =  user.AffectedUser,
-            AffectedUserId = user.AffectedUserId,
-        });
+            .Take(logCount)
+            .ToList();
 
-        vm.Logs = items.ToList();
-        
+        vm.Logs = logMapper.Map(logEntries);
+       
         return View(vm);
     }
     
@@ -122,12 +110,7 @@ public class UsersController(IUserService userService, ILogService logService) :
     public ViewResult Create()
     {
         ViewData["Title"] = "Create User";
-        
-        var newUser = new User()
-        {
-            IsActive = true
-        };
-        
+        var newUser = new User  { IsActive = false };
         return View(newUser);
     }
 
@@ -166,15 +149,8 @@ public class UsersController(IUserService userService, ILogService logService) :
         }
         else
         {
-            items = userService.GetAll().Select(user => new UserListItemViewModel
-            {
-                Id = user.Id,
-                Forename = user.Forename,
-                Surname = user.Surname,
-                Email = user.Email,
-                IsActive = user.IsActive,
-                DateOfBirth = user.DateOfBirth
-            });
+            var users = userService.GetAll().ToList();
+            items = userMapper.Map(users);
             
             ViewData["Title"] = "User List";
         }
@@ -189,15 +165,8 @@ public class UsersController(IUserService userService, ILogService logService) :
 
     private IEnumerable<UserListItemViewModel> GetUsersByActiveState(bool isActive)
     {
-        var items =  userService.FilterByActive(isActive).Select(user => new UserListItemViewModel
-        {
-            Id = user.Id,
-            Forename = user.Forename,
-            Surname = user.Surname,
-            Email = user.Email,
-            IsActive = user.IsActive,
-            DateOfBirth = user.DateOfBirth
-        });
+        var items = userService.FilterByActive(isActive);
+        var users = userMapper.Map(items.ToList());
 
         if (isActive)
         {
@@ -210,6 +179,6 @@ public class UsersController(IUserService userService, ILogService logService) :
             logService.Create(new Log { Summary = SystemLogEntry.NonActiveUsersFilterApplied });
         }
         
-        return items;
+        return users;
     }
 }

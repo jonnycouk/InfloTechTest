@@ -18,39 +18,55 @@
                 
                 @using (Html.BeginForm("Update", "Users", FormMethod.Post))
                 {
-                    @Html.HiddenFor(x => x.Id)
+                    @Html.HiddenFor(user => user.Id)
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                     <div class="row">
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
-                                @Html.LabelFor(x => x.Forename, new { @class = "form-label required-label" })
-                                @Html.EditorFor(x => x.Forename, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(x => x.Forename, "", new { @class = "text-danger" })
+                                @Html.LabelFor(user => user.Forename, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Forename, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.Forename, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
-                                @Html.LabelFor(x => x.Surname, new { @class = "form-label required-label" })
-                                @Html.EditorFor(x => x.Surname, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(x => x.Surname, "", new { @class = "text-danger" })
+                                @Html.LabelFor(user => user.Surname, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Surname, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.Surname, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.Organisation, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Organisation, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.Organisation, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
-                                @Html.LabelFor(x => x.Email, new { @class = "form-label required-label" })
-                                @Html.EditorFor(x => x.Email, new { htmlAttributes = new { @class = "form-control", type = "email" } })
-                                @Html.ValidationMessageFor(x => x.Email, "", new { @class = "text-danger" })
+                                @Html.LabelFor(user => user.JobTitle, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(user => user.JobTitle, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="col-md-6 col-sm-12 mb-3">
                             <div class="form-group">
-                                @Html.LabelFor(x => x.DateOfBirth, new { @class = "form-label required-label" })
-                                @Html.EditorFor(x => x.DateOfBirth, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
-                                @Html.ValidationMessageFor(x => x.DateOfBirth, "", new { @class = "text-danger" })
+                                @Html.LabelFor(user => user.Email, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.Email, new { htmlAttributes = new { @class = "form-control", type = "email" } })
+                                @Html.ValidationMessageFor(user => user.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 col-sm-12 mb-3">
+                            <div class="form-group">
+                                @Html.LabelFor(user => user.DateOfBirth, new { @class = "form-label required-label" })
+                                @Html.EditorFor(user => user.DateOfBirth, new { htmlAttributes = new { @class = "form-control", type = "date", max = DateTime.Now.ToString("yyyy-MM-dd") } })
+                                @Html.ValidationMessageFor(user => user.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>
@@ -60,12 +76,12 @@
                             <div class="form-group">
 
                                 <div class="form-check form-switch mt-2">
-                                    @Html.CheckBoxFor(x => x.IsActive, new { @class = "form-check-input", role = "switch" })
-                                    <label class="form-check-label" for="@Html.IdFor(x => x.IsActive)">Set User As
+                                    @Html.CheckBoxFor(user => user.IsActive, new { @class = "form-check-input", role = "switch" })
+                                    <label class="form-check-label" for="@Html.IdFor(user => user.IsActive)">Set User As
                                         Active</label>
                                 </div>
 
-                                @Html.ValidationMessageFor(x => x.IsActive, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(user => user.IsActive, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>

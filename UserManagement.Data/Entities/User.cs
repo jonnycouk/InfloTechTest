@@ -30,4 +30,12 @@ public class User
     
     [DisplayName("Date of Birth")]
     public DateTime DateOfBirth { get; set; } = new DateTime(DateTime.Now.AddYears(-16).Year, 1, 1); // Start age around 16 years old to work in UK
+    
+    [Required(ErrorMessage = "Organisation is required")]
+    [StringLength(50, ErrorMessage =  "Organisation must be less than 50 characters")]
+    public string Organisation { get; set; } = default!;
+    
+    [Required(ErrorMessage = "Job Title is required")]
+    [StringLength(50, ErrorMessage =  "Job Title must be less than 50 characters")]
+    public string JobTitle { get; set; } = default!;
 }

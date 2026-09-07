@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using UserManagement.Services.Domain.Implementations;
 using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Web.Mapper;
 using Westwind.AspNetCore.Markdown;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,9 @@ builder.Services
     .AddDomainServices()
     .AddMarkdown()
     .AddControllersWithViews();
+
+builder.Services.AddSingleton<UserMapper>();
+builder.Services.AddSingleton<LogMapper>();
 
 var app = builder.Build();
 

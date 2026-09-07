@@ -1,6 +1,7 @@
 using System.Diagnostics.Contracts;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
 using UserManagement.WebMS.Controllers;
 
@@ -74,7 +75,9 @@ public class UserControllerTests
 
     private readonly Mock<IUserService> _userService = new();
     private readonly Mock<ILogService> _logService = new();
+    private readonly Mock<UserMapper> _userMapper = new();
+    private readonly Mock<LogMapper> _logMapper = new();
     
     
-    private UsersController CreateController() => new(_userService.Object, _logService.Object);
+    private UsersController CreateController() => new(_userService.Object, _logService.Object, _logMapper.Object, _userMapper.Object);
 }

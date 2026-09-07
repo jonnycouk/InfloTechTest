@@ -1,34 +1,26 @@
 ﻿using System.Linq;
+using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Logs;
 
 namespace UserManagement.WebMS.Controllers;
 
-public class LogsController(ILogService logService) : Controller
+public class LogsController(ILogService logService, LogMapper logMapper) : Controller
 {
     [HttpGet]
     public ViewResult List(int skip = 0, int take = 100)
     {
         //TODO: JW: Add paging
-        
+
         ViewData["AppIcon"] = "eye.gif";
         ViewData["Title"] = "Log Viewer";
-        IEnumerable<LogListItemViewModel> items;
-        
-        items = logService.GetAll(skip, take).Select(user => new LogListItemViewModel
-        {
-            Id = user.Id,
-            Summary = user.Summary,
-            CreateUtc = user.CreatedUtc,
-            User = user.User,
-            UserId =  user.UserId,
-            AffectedUser =  user.AffectedUser,
-            AffectedUserId = user.AffectedUserId,
-        });
+
+        var items = logService.GetAll(skip, take).ToList();
 
         var model = new LogListViewModel
         {
-            Items = items.ToList()
+            Items = logMapper.Map(items.ToList())
         };
         
         return View(model);
@@ -39,8 +31,8 @@ public class LogsController(ILogService logService) : Controller
     {
         ViewData["AppIcon"] = "eye.gif";
         ViewData["Title"] = "Log Viewer";
-        
-        var model = logService.GetById(id);
+
+        var model = logMapper.Map(logService.GetById(id) ?? new Log());
         return View(model);
     }
 }

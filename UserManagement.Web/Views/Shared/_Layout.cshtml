@@ -1,16 +1,19 @@
 @{
-    var appIcon = $"../../assets/images/{ViewData["AppIcon"] ?? "people.gif"}" ;
+    var appIcon = $"../../assets/images/{ViewData["AppIcon"] ?? "people.gif"}";
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - User Management</title>
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/helloworld.styles.css" asp-append-version="true" />
+    
     <link rel="apple-touch-icon" sizes="57x57" href="~/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="~/favicon/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="~/favicon/apple-icon-72x72.png">
@@ -20,7 +23,7 @@
     <link rel="apple-touch-icon" sizes="144x144" href="~/favicon/apple-icon-144x144.png">
     <link rel="apple-touch-icon" sizes="152x152" href="~/favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="~/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="~/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/favicon/android-icon-192x192.png">
     <link rel="icon" type="image/png" sizes="32x32" href="~/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="96x96" href="~/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="~/favicon/favicon-16x16.png">
@@ -29,43 +32,56 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">User Management</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+<body class="d-flex flex-column min-vh-100 bg-light">
+    <header class="bg-white border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom py-3">
+            <div class="container-xxl">
+                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
+                    User Management
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav ms-auto gap-2">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link px-3 fw-medium" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Users" asp-action="List">Users</a>
+                            <a class="nav-link px-3 fw-medium" asp-controller="Users" asp-action="List">Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Logs" asp-action="List">Logs</a>
+                            <a class="nav-link px-3 fw-medium" asp-controller="Logs" asp-action="List">Logs</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        
-        <div class="p-2">
-            <img src="@appIcon" style="width: 64px" title="Inflo" alt="Inflo"/> &nbsp; <img src="~/assets/images/inflo-logo-98x40.png" title="Inflo" alt="Inflo"/>
-            <p class="small"><strong>Science | Agility | Ownership | Openness</strong></p>
-        </div>
-        
-    </header>
-    <div class="container p-5">
-        @RenderBody()
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container-xxl py-4 px-4">
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <img src="@appIcon" style="height: 48px; width: auto;" title="Inflo" alt="Inflo" class="img-fluid rounded" />
+                <div class="vr opacity-25" style="height: 36px;"></div>
+                <img src="~/assets/images/inflo-logo-98x40.png" style="height: 36px; width: auto;" title="Inflo" alt="Inflo" class="img-fluid" />
+            </div>
+            <p class="text-muted small mb-0 fw-semibold tracking-wide">
+                Science &bull; Agility &bull; Ownership &bull; Openness
+            </p>
+        </div>
+    </header>
+
+    <main class="flex-grow-1 py-4">
+        <div class="container-xxl px-4">
+            <div class="bg-white rounded-3 shadow-sm p-4 p-md-5">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-top footer bg-white text-muted py-3 mt-auto">
+        <div class="container-xxl text-center text-md-start">
+            <small>&copy; @DateTime.Now.Year - User Management System</small>
         </div>
     </footer>
 
