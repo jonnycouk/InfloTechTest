@@ -12,7 +12,7 @@ public static class SystemLogEntry
     public const string UserAccountViewed = "User Account Viewed";
     public const string UserAccountDeleted = "User Account Deleted";
     public const string UserAccountOpenedToEdit = "User Account Edit Screen Opened";
-    public const string UserAccountEdited = "User Account Edit Edited";
+    public const string UserAccountEdited = "User Account Edited";
     public const string UserAccountCreated = "User Account Created";
     public const string ActiveUsersFilterApplied = "Active User Filter Applied";
     public const string NonActiveUsersFilterApplied = "Non-active User Filter Applied";
