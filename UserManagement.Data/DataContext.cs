@@ -7,13 +7,16 @@ namespace UserManagement.Data;
 
 public class DataContext : DbContext, IDataContext
 {
-    public DataContext() => Database.EnsureCreated();
+    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseInMemoryDatabase("UserManagement.Data.DataContext");
+    public DataContext()
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnModelCreating(ModelBuilder model)
-        => model.Entity<User>().HasData(new[]
+    {
+        model.Entity<User>().HasData(new[]
         {
             new User { Id = 1, Forename = "System", Surname = "User", Email = "system.user@example.com", IsActive = true, DateOfBirth = new DateTime(1984, 1, 1), Organisation = "Inflo", JobTitle = "System User Account" },
             new User { Id = 2, Forename = "Jonny", Surname = "Wilson", Email = "jonny.wilson@inflo.com", IsActive = true, DateOfBirth = new DateTime(1984, 3, 14), Organisation = "Inflo", JobTitle = "Senior Software Engineer"  },
@@ -28,6 +31,7 @@ public class DataContext : DbContext, IDataContext
             new User { Id = 11, Forename = "Johnny", Surname = "Blaze", Email = "jblaze@example.com", IsActive = true, DateOfBirth = new DateTime(1992, 2, 14), Organisation = "Inflo", JobTitle = "Senior Account Manager"  },
             new User { Id = 12, Forename = "Robin", Surname = "Feld", Email = "rfeld@example.com", IsActive = true, DateOfBirth = new DateTime(1959, 8, 3), Organisation = "Inflo", JobTitle = "Talent Aquisition Specialis"  },
         });
+    }
 
     public DbSet<User>? Users { get; set; }
     public DbSet<Log>? Logs { get; set; }
