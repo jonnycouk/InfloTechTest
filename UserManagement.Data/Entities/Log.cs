@@ -16,7 +16,7 @@ public class Log
 
     public User User { get; set; } = default!;  // For future expansion to track a logged in user effecting the entity
     
-    [StringLength(50)]
+    [StringLength(100)]
     [DisplayName("Log Summary")]
     public string Summary { get; set; } = default!;
     

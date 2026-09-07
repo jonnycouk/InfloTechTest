@@ -21,9 +21,8 @@ builder.Services.AddSingleton<UserMapper>();
 builder.Services.AddSingleton<LogMapper>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
 
 var app = builder.Build();
 

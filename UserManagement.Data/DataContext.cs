@@ -11,7 +11,7 @@ public class DataContext : DbContext, IDataContext
 
     public DataContext()
     {
-        Database.EnsureCreated();
+        
     }
 
     protected override void OnModelCreating(ModelBuilder model)
