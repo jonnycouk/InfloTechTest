@@ -1,5 +1,12 @@
 @{
     var appIcon = $"../../assets/images/{ViewData["AppIcon"] ?? "people.gif"}";
+    var appTitle = "User Management";
+    var appBaseUrl = "https://inflo.jonny.uk";
+    var appStrapline = "Identity-Driven Access Governance: Gain deep insights into user activity, automate compliance, and strengthen security with data-rich user analytics.";
+    
+    // Gives a unique image URL to stop WhatsApp/Facebook caching the image
+    long unixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    var ogImageName = $"{appBaseUrl}/assets/opengraph/user-management-og-main.jpg?v={unixTime.ToString()}";
 }
 
 <!DOCTYPE html>
@@ -7,12 +14,32 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - User Management</title>
+    <title>@ViewData["Title"] - @appTitle</title>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/helloworld.styles.css" asp-append-version="true" />
+
+    <!-- HTML Meta Tags -->
+    <title>@appTitle</title>
+    <meta name="description" content="@appStrapline">
+    <meta property="og:logo" content="@ogImageName"/>
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="@appBaseUrl">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="@appTitle">
+    <meta property="og:description" content="@appStrapline">
+    <meta property="og:image" content="@ogImageName">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="inflo.jonny.uk">
+    <meta property="twitter:url" content="@appBaseUrl">
+    <meta name="twitter:title" content="@appTitle">
+    <meta name="twitter:description" content="@appStrapline">
+    <meta name="twitter:image" content="@ogImageName">    
     
     <link rel="apple-touch-icon" sizes="57x57" href="~/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="~/favicon/apple-icon-60x60.png">
@@ -37,7 +64,7 @@
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom py-3">
             <div class="container-xxl">
                 <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
-                    User Management
+                    @appTitle
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" 
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
