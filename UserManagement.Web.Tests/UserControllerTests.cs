@@ -77,7 +77,8 @@ public class UserControllerTests
     private readonly Mock<ILogService> _logService = new();
     private readonly Mock<UserMapper> _userMapper = new();
     private readonly Mock<LogMapper> _logMapper = new();
+    private readonly Mock<ISecurityService> _securityService = new();
     
     
-    private UsersController CreateController() => new(_userService.Object, _logService.Object, _logMapper.Object, _userMapper.Object);
+    private UsersController CreateController() => new(_userService.Object, _logService.Object, _logMapper.Object, _userMapper.Object, _securityService.Object);
 }

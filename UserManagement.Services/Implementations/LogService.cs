@@ -11,7 +11,7 @@ public class LogService(IDataContext dataAccess) : ILogService
 {
     public IEnumerable<Log> GetAll(int skip = 0, int take = 50)
     {
-        return dataAccess.GetAll<Log>().Skip(skip).Take(take).ToList().OrderByDescending(l => l.Id);
+        return dataAccess.GetAll<Log>().OrderByDescending(l => l.Id).Skip(skip).Take(take).ToList();
     }
 
     public void Create(Log log)

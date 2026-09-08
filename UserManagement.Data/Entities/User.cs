@@ -38,4 +38,10 @@ public class User
     [Required(ErrorMessage = "Job Title is required")]
     [StringLength(50, ErrorMessage =  "Job Title must be less than 50 characters")]
     public string JobTitle { get; set; } = default!;
+    
+    [MaxLength(16)]
+    public string PasswordSalt { get; set; } = string.Empty;
+    
+    [MaxLength(128)]
+    public string PasswordHash { get; set; } = string.Empty;
 }

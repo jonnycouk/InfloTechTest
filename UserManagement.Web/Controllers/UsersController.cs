@@ -11,7 +11,13 @@ using UserManagement.Web.ViewModels;
 namespace UserManagement.WebMS.Controllers;
 
 [Route("users")]
-public class UsersController(IUserService userService, ILogService logService, LogMapper logMapper, UserMapper userMapper) : Controller
+public class UsersController(
+    IUserService userService, 
+    ILogService logService, 
+    LogMapper logMapper, 
+    UserMapper userMapper,
+    ISecurityService securityService
+    ) : Controller
 {
     [HttpGet("Delete/{id:long}")]
     public IActionResult Delete(long id)
@@ -111,27 +117,29 @@ public class UsersController(IUserService userService, ILogService logService, L
     {
         ViewData["Title"] = "Create User";
         var newUser = new User  { IsActive = false };
-        return View(newUser);
+        return View(new UserViewModel { User  = newUser });
     }
 
     [HttpPost("Create")]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(User user)
+    public IActionResult Create(UserViewModel vm)
     {
         if (!ModelState.IsValid)
         {
             // Return view with validation errors
-            return View(user);
+            return View(vm);
         }
         
         ViewData["Title"] = "Create";
         
         // Enforce this in case it was changed in post
-        user.IsActive = false;
+        vm.User.IsActive = false;
+        vm.User.PasswordSalt = securityService.GenerateSalt();
+        vm.User.PasswordHash = securityService.SaltAndHashPassword(vm.User.PasswordSalt, vm.Password);
         
-        userService.Create(user);
+        userService.Create(vm.User);
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = user });
+        logService.Create(new Log { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
         return RedirectToAction("List");
     }
     
