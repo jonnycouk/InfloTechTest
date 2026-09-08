@@ -72,21 +72,42 @@ public class UsersController(
     {
         if (!ModelState.IsValid)
         {
-            // Return view with validation errors
             return View("Edit", user);
         }
-        
+
         ViewData["Title"] = "Edit";
+
+        var existingUser = userService.GetById(user.Id);
         
-        // Retrieve non-tracked entity before update and store it for audit purposes
-        var previousUserDetail = userMapper.Map(userService.GetDetachedEntityById(user.Id) ?? new());
-        userService.Update(user);
-        
+        if (existingUser == null)
+        {
+            return NotFound();
+        }
+
+        // For logging below
+        var previousUserDetail = userMapper.Map(existingUser);
+
+        existingUser.Forename = user.Forename;
+        existingUser.Surname = user.Surname;
+        existingUser.Email = user.Email;
+        existingUser.IsActive = user.IsActive;
+        existingUser.DateOfBirth = user.DateOfBirth;
+        existingUser.Organisation = user.Organisation;
+        existingUser.JobTitle = user.JobTitle;
+
+        userService.Update(existingUser);
+
         TempData["ToastType"] = "success";
-        TempData["ToastMessage"] = $"User updated successfully.";
-        
+        TempData["ToastMessage"] = "User updated successfully.";
+
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
+        
+        logService.Create(new Log 
+        { 
+            Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", 
+            AffectedUser = existingUser, 
+            Detail = $"Previous Value: {jsonDetail}"
+        });
 
         return RedirectToAction("List");
     }
