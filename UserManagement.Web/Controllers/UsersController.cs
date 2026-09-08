@@ -79,12 +79,11 @@ public class UsersController(
         ViewData["Title"] = "Edit";
         
         // Retrieve non-tracked entity before update and store it for audit purposes
-        var previousUserDetail = userService.GetDetachedEntityById(user.Id);
+        var previousUserDetail = userMapper.Map(userService.GetDetachedEntityById(user.Id) ?? new());
         userService.Update(user);
         
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = $"User updated successfully.";
-
         
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
