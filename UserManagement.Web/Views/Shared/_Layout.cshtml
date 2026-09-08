@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/helloworld.styles.css" asp-append-version="true" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    
     <!-- HTML Meta Tags -->
     <title>@appTitle</title>
     <meta name="description" content="@appStrapline">
@@ -113,8 +114,18 @@
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-</body>
+    
+    @if (TempData["ToastMessage"] != null)
+    {
+        <script>
+        $(document).ready(function () {
+            toastr['@TempData["ToastType"]']('@TempData["ToastMessage"]');
+        });
+    </script>
+    }
+    </body>
 </html>

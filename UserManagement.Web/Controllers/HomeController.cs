@@ -11,6 +11,7 @@ public class HomeController(ILogService logService) : Controller
     {
         ViewData["AppIcon"] = "people.gif";
         logService.Create(new Log { Summary = SystemLogEntry.ApplicationStarted });
+        
         return View();
     }
 }

@@ -45,6 +45,10 @@ public class UsersController(
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
 
         userService.Delete(user);
+        
+        TempData["ToastType"] = "success";
+        TempData["ToastMessage"] = $"User deleted successfully.";
+
         return RedirectToAction("List");
     }
     
@@ -77,6 +81,11 @@ public class UsersController(
         // Retrieve non-tracked entity before update and store it for audit purposes
         var previousUserDetail = userService.GetDetachedEntityById(user.Id);
         userService.Update(user);
+        
+        TempData["ToastType"] = "success";
+        TempData["ToastMessage"] = $"User updated successfully.";
+
+        
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = user, Detail = $"Previous Value: {jsonDetail}"});
 
@@ -138,6 +147,9 @@ public class UsersController(
         vm.User.PasswordHash = securityService.SaltAndHashPassword(vm.User.PasswordSalt, vm.Password);
         
         userService.Create(vm.User);
+        
+        TempData["ToastType"] = "success";
+        TempData["ToastMessage"] = $"User created successfully.";
         
         logService.Create(new Log { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
         return RedirectToAction("List");
