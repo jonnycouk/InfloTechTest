@@ -15,7 +15,9 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(conne
 builder.Services.AddScoped<IDataContext>(provider => provider.GetRequiredService<DataContext>());
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<LogMapper>();
     
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
 using UserManagement.Sdk.Model;
 
-namespace UserManagement.Sdk.Response;
+namespace UserManagement.Sdk.Response.Users;
 
 public class GetUserResponse : BaseResponse
 {

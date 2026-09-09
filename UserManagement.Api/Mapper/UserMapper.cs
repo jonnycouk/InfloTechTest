@@ -1,7 +1,7 @@
 using Riok.Mapperly.Abstractions;
 using UserManagement.Models;
 using UserManagement.Sdk.Model;
-using UserManagement.Sdk.Request;
+using UserManagement.Sdk.Request.Users;
 
 namespace UserManagement.Api.Mapper;
 

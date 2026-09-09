@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using UserManagement.Data;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
@@ -27,7 +28,10 @@ public class LogService(IDataContext dataAccess) : ILogService
 
     public Log? GetById(long id)
     {
-        return dataAccess.GetById<Log>(id);
+        return dataAccess.GetAll<Log>()
+            .Include(l => l.User)
+            .Include(l => l.AffectedUser)
+            .FirstOrDefault(l => l.Id == id);
     }
 
     public IEnumerable<Log>? GetByAffectedUserId(long id)

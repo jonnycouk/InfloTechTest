@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Api.Mapper;
 using UserManagement.Sdk.Request;
+using UserManagement.Sdk.Request.Users;
 using UserManagement.Sdk.Response;
+using UserManagement.Sdk.Response.Users;
 using UserManagement.Services.Domain.Interfaces;
 
 namespace UserManagement.Api.Feature.Users;
@@ -129,9 +131,8 @@ public class UserController (IUserService userService, UserMapper userMapper) : 
             
             return Ok(deleteUserResponse);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            var ex = e.Message;
             deleteUserResponse.Success = false;
             deleteUserResponse.Message = "There was an error deleting the requested user";
             return BadRequest(deleteUserResponse);

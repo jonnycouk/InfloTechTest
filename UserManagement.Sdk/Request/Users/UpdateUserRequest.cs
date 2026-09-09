@@ -1,4 +1,4 @@
-namespace UserManagement.Sdk.Request;
+namespace UserManagement.Sdk.Request.Users;
 
 public class UpdateUserRequest
 {
