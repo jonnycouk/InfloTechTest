@@ -1,0 +1,284 @@
+{
+  "info": {
+    "_postman_id": "6d14eef9-9fa7-42ff-921a-65f85844d605",
+    "name": "Inflo API Live",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "4188256"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/user/get/3",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "user",
+                "get",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/user/get/0/20",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "user",
+                "get",
+                "0",
+                "20"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"id\": 3,\n    \"forename\": \"Benjamin Franklin\",\n    \"surname\": \"Gates\",\n    \"jobTitle\": \"Database Administrator\",\n    \"organisation\": \"Inflo\",\n    \"email\": \"bfgates@example.com\",\n    \"isActive\": true,\n    \"dateOfBirth\": \"1968-11-22T00:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/user/update",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "user",
+                "update"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "test"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{    \n    \"forename\": \"Benjamin Franklin 2\",\n    \"surname\": \"Gates 2\",\n    \"jobTitle\": \"Database Administrator 2\",\n    \"organisation\": \"Inflo 2\",\n    \"email\": \"bfgates2@example.com\",\n    \"isActive\": true,\n    \"dateOfBirth\": \"1968-11-22T00:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7063/v1/user/create",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7063",
+              "path": [
+                "v1",
+                "user",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "test"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{    \n    \"forename\": \"Benjamin Franklin 2\",\n    \"surname\": \"Gates 2\",\n    \"jobTitle\": \"Database Administrator 2\",\n    \"organisation\": \"Inflo 2\",\n    \"email\": \"bfgates2@example.com\",\n    \"isActive\": true,\n    \"dateOfBirth\": \"1968-11-22T00:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7063/v1/user/delete/15",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7063",
+              "path": [
+                "v1",
+                "user",
+                "delete",
+                "15"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Logs",
+      "item": [
+        {
+          "name": "Get Log",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "test"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:7063/v1/logs/get/1",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7063",
+              "path": [
+                "v1",
+                "logs",
+                "get",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Logs",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "test"
+              }
+            ],
+            "url": {
+              "raw": "https://localhost:7063/v1/logs/get/1/5",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7063",
+              "path": [
+                "v1",
+                "logs",
+                "get",
+                "1",
+                "5"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Log",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "test"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"summary\": \"Test Log\",\n  \"detail\": \"string\",\n  \"createdUtc\": \"2026-09-09T13:50:14.601Z\",\n  \"affectedUserId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://localhost:7063/v1/logs/add/",
+              "protocol": "https",
+              "host": [
+                "localhost"
+              ],
+              "port": "7063",
+              "path": [
+                "v1",
+                "logs",
+                "add",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "apikey"
+  },
+  "variable": [
+    {
+      "key": "api-key",
+      "secret": true
+    }
+  ]
+}

@@ -1,34 +1,26 @@
 using System.Collections.Generic;
-using System.Linq;
+using Riok.Mapperly.Abstractions;
 using UserManagement.Models;
 using UserManagement.Sdk.Model;
+using UserManagement.Sdk.Request.Logs;
 
 namespace UserManagement.Api.Mapper;
 
-public class LogMapper
+[Mapper]
+public partial class LogMapper
 {
     private readonly UserMapper _userMapper = new();
+    
+    [MapperIgnoreTarget(nameof(Log.AffectedUser))]
+    [MapperIgnoreTarget(nameof(Log.User))]
+    public partial Log Map(AddLogRequest request);
 
-    public LogDto Map(Log entity)
+    public partial LogDto Map(Log entity);
+
+    public partial List<LogDto> Map(List<Log> entities);
+
+    private UserDto? MapUser(User? user)
     {
-        if (entity == null) return null!;
-
-        return new LogDto
-        {
-            Id = entity.Id,
-            UserId = entity.UserId,
-            Summary = entity.Summary,
-            Detail = entity.Detail,
-            CreatedUtc = entity.CreatedUtc,
-            AffectedUserId = entity.AffectedUserId,
-            User = entity.User != null ? _userMapper.Map(entity.User) : null!,
-            AffectedUser = entity.AffectedUser != null ? _userMapper.Map(entity.AffectedUser) : null
-        };
-    }
-
-    public List<LogDto> Map(List<Log> entities)
-    {
-        if (entities == null) return new List<LogDto>();
-        return entities.Select(Map).ToList();
+        return user == null ? null : _userMapper.Map(user);
     }
 }

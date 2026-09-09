@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Api.Mapper;
-using UserManagement.Sdk.Request;
 using UserManagement.Sdk.Request.Users;
-using UserManagement.Sdk.Response;
 using UserManagement.Sdk.Response.Users;
 using UserManagement.Services.Domain.Interfaces;
 
 namespace UserManagement.Api.Feature.Users;
 
+[Authenticate]
 [ApiController]
 [Route("v1/[controller]")]
 public class UserController (IUserService userService, UserMapper userMapper) : ControllerBase
@@ -111,7 +110,7 @@ public class UserController (IUserService userService, UserMapper userMapper) : 
         }
     }
     
-    [HttpDelete("Delete")]
+    [HttpDelete("Delete/{id}")]
     public IActionResult Delete(long id)
     {
         var deleteUserResponse = new DeleteUserResponse { Success = true };
@@ -119,11 +118,19 @@ public class UserController (IUserService userService, UserMapper userMapper) : 
         try
         {
             var existingUser = userService.GetById(id);
-
+            
             if (existingUser == null)
             {
                 deleteUserResponse.Message = "User not found";
                 return Ok(deleteUserResponse);
+            }
+            
+            if (existingUser.Id == 1)
+            {
+                // System user cannot be deleted - but don't tell the caller the users status 
+                deleteUserResponse.Message = "User not found";
+                deleteUserResponse.Success = false;
+                return Conflict(deleteUserResponse); 
             }
             
             userService.Delete(existingUser);
