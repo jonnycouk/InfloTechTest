@@ -16,6 +16,20 @@ public class DataContext : DbContext, IDataContext
 
     protected override void OnModelCreating(ModelBuilder model)
     {
+        base.OnModelCreating(model);
+
+        model.Entity<Log>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(l => l.AffectedUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        model.Entity<Log>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(l => l.AffectedUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         model.Entity<User>().HasData(new[]
         {
             new User { Id = 1, Forename = "System", Surname = "User", Email = "system.user@example.com", IsActive = true, DateOfBirth = new DateTime(1984, 1, 1), Organisation = "Inflo", JobTitle = "System User Account" },

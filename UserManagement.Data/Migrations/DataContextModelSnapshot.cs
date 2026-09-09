@@ -53,7 +53,7 @@ namespace UserManagement.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("UserManagement.Models.User", b =>
@@ -106,7 +106,7 @@ namespace UserManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
