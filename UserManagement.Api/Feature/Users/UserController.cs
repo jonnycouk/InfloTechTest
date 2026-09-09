@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Api.Mapper;
-using UserManagement.Sdk.Model;
 using UserManagement.Sdk.Request;
 using UserManagement.Sdk.Response;
 using UserManagement.Services.Domain.Interfaces;

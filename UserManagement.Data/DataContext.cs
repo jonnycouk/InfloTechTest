@@ -9,27 +9,25 @@ public class DataContext : DbContext, IDataContext
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-    public DataContext()
-    {
-        
-    }
+    public DataContext() { }
 
     protected override void OnModelCreating(ModelBuilder model)
     {
         base.OnModelCreating(model);
 
+        // Map both foreign keys using ClientCascade to prevent DB-level cycle error 1785
         model.Entity<Log>()
-            .HasOne<User>()
+            .HasOne(l => l.AffectedUser)
             .WithMany()
             .HasForeignKey(l => l.AffectedUserId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
+            .OnDelete(DeleteBehavior.ClientCascade);
+
         model.Entity<Log>()
-            .HasOne<User>()
+            .HasOne(l => l.User)
             .WithMany()
-            .HasForeignKey(l => l.AffectedUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-        
+            .HasForeignKey(l => l.UserId)
+            .OnDelete(DeleteBehavior.ClientCascade);
+
         model.Entity<User>().HasData(new[]
         {
             new User { Id = 1, Forename = "System", Surname = "User", Email = "system.user@example.com", IsActive = true, DateOfBirth = new DateTime(1984, 1, 1), Organisation = "Inflo", JobTitle = "System User Account" },
@@ -67,6 +65,15 @@ public class DataContext : DbContext, IDataContext
 
     public void Delete<TEntity>(TEntity entity) where TEntity : class
     {
+        if (entity is User user)
+        {
+            var logs = Set<Log>().Where(l => l.AffectedUserId == user.Id || l.UserId == user.Id).ToList();
+            if (logs.Any())
+            {
+                base.RemoveRange(logs);
+            }
+        }
+
         base.Remove(entity);
         SaveChanges();
     }

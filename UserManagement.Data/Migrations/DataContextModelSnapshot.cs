@@ -53,7 +53,7 @@ namespace UserManagement.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Logs", (string)null);
+                    b.ToTable("Logs");
                 });
 
             modelBuilder.Entity("UserManagement.Models.User", b =>
@@ -106,7 +106,7 @@ namespace UserManagement.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
@@ -271,12 +271,13 @@ namespace UserManagement.Data.Migrations
                 {
                     b.HasOne("UserManagement.Models.User", "AffectedUser")
                         .WithMany()
-                        .HasForeignKey("AffectedUserId");
+                        .HasForeignKey("AffectedUserId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("UserManagement.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("AffectedUser");

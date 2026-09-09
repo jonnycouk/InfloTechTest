@@ -12,8 +12,8 @@ using UserManagement.Data;
 namespace UserManagement.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260908093251_AddPasswordSaltAndHashToUserTable")]
-    partial class AddPasswordSaltAndHashToUserTable
+    [Migration("20260909113500_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -274,12 +274,13 @@ namespace UserManagement.Data.Migrations
                 {
                     b.HasOne("UserManagement.Models.User", "AffectedUser")
                         .WithMany()
-                        .HasForeignKey("AffectedUserId");
+                        .HasForeignKey("AffectedUserId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("UserManagement.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("AffectedUser");
