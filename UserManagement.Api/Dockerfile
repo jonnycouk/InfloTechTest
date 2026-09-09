@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
@@ -7,9 +7,11 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UserManagement.Api/UserManagement.Api.csproj", "UserManagement.Api/"]
-RUN dotnet restore "UserManagement.Api/UserManagement.Api.csproj"
+
+# Copy full solution source code first so all project references resolve
 COPY . .
+RUN dotnet restore "UserManagement.Api/UserManagement.Api.csproj"
+
 WORKDIR "/src/UserManagement.Api"
 RUN dotnet build "./UserManagement.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

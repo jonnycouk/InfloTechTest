@@ -21,15 +21,26 @@ builder.Services.AddScoped<LogMapper>();
     
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+// if (app.Environment.IsDevelopment())
+// {
+//     app.MapOpenApi();
+//
+//     app.UseSwaggerUI(options =>
+//     {
+//         options.SwaggerEndpoint("/openapi/v1.json", "v1");
+//     });
+// }
 
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "v1");
-    });
-}
+// For Live Demo
+
+app.MapOpenApi();
+
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+});
+
+
 
 app.MapControllers();
 
