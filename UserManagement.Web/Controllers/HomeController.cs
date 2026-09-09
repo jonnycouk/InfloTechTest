@@ -4,14 +4,12 @@ using UserManagement.Web;
 
 namespace UserManagement.WebMS.Controllers;
 
-public class HomeController(ILogService logService) : Controller
+public class HomeController : Controller
 {
     [HttpGet]
-    public ViewResult Index()
+    public IActionResult Index()
     {
         ViewData["AppIcon"] = "people.gif";
-        logService.Create(new Log { Summary = SystemLogEntry.ApplicationStarted });
-        
-        return View();
+        return RedirectToAction("List", "Users");
     }
 }
