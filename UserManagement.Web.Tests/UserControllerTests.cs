@@ -1,12 +1,9 @@
-using FluentAssertions;
-using Moq;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
 using UserManagement.WebMS.Controllers;
-using Xunit;
 
 namespace UserManagement.Data.Tests;
 
@@ -47,7 +44,7 @@ public class UserControllerTests
     {
         // Arrange
         var controller = CreateController();
-        SetupUsers(isActive: false); // Fixed: set up an inactive user for this test
+        SetupUsers(isActive: false); 
 
         // Act
         var result = controller.List(false);
@@ -55,7 +52,7 @@ public class UserControllerTests
         // Assert
         result.Model.Should().BeOfType<UserListViewModel>().Which.Items.Should().OnlyContain(c => !c.IsActive);
     }
-
+   
     private UserDto[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
     {
         var users = new[]
@@ -68,8 +65,7 @@ public class UserControllerTests
                 IsActive = isActive
             }
         };
-
-        // Fixed: Use It.IsAny so it matches regardless of what parameters the controller passes
+        
         _userApiService
             .Setup(s => s.GetAll(It.IsAny<string?>()!))
             .Returns(users);

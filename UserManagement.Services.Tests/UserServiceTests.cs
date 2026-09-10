@@ -9,23 +9,44 @@ public class UserServiceTests
     [Fact]
     public void GetAll_WhenContextReturnsEntities_MustReturnSameEntities()
     {
-        // Arrange: Initializes objects and sets the value of the data that is passed to the method under test.
+        // Arrange
         var service = CreateService();
         var users = SetupUsers();
 
-        // Act: Invokes the method under test with the arranged parameters.
+        // Act
         var result = service.GetAll();
 
-        // Assert: Verifies that the action of the method under test behaves as expected.
+        // Assert
         result.Should().BeSameAs(users);
     }
+    
+    [Fact]
+    public void GetById_WhenUserExists_MustReturnCorrectUser()
+    {
+        // Arrange
+        var service = CreateService();
+        var users = SetupUsers();
+        var expectedUser = users.First();
+        
+        _dataContext
+            .Setup(s => s.GetById<User>(expectedUser.Id))
+            .Returns(expectedUser);
 
+        // Act
+        var result = service.GetById(expectedUser.Id);
+
+        // Assert
+        result.Should().BeEquivalentTo(expectedUser);
+    }
+    
+    
     private IQueryable<User> SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
     {
         var users = new[]
         {
             new User
             {
+                Id = 1,
                 Forename = forename,
                 Surname = surname,
                 Email = email,

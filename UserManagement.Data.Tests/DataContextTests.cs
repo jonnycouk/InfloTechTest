@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using UserManagement.Models;
 
@@ -8,6 +7,23 @@ namespace UserManagement.Data.Tests;
 
 public class DataContextTests
 {
+    
+    [Fact]
+    public void Get_WhenDbCreated_MustIncludeSystemUserEntity()
+    {
+        // Arrange
+        var context = CreateContext();
+    
+        // Act
+        var systemUser = context.GetAll<User>().FirstOrDefault(u => u.Id == 1);
+
+        // Assert
+        systemUser.Should().NotBeNull();
+        systemUser.Id.Should().Be(1);
+        systemUser.Forename.Should().Be("System");
+        systemUser.Surname.Should().Be("User");
+    }
+    
     [Fact]
     public void GetAll_WhenNewEntityAdded_MustIncludeNewEntity()
     {
@@ -47,7 +63,7 @@ public class DataContextTests
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Should().NotContain(s => s.Email == entity.Email);
     }
-   
+    
     private DataContext CreateContext()
     {
         var options = new DbContextOptionsBuilder<DataContext>()
