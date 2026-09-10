@@ -1,5 +1,6 @@
-using System.Diagnostics.Contracts;
-using UserManagement.Models;
+using UserManagement.ApiServices.Logs;
+using UserManagement.ApiServices.Users;
+using UserManagement.Sdk.Model;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
@@ -53,11 +54,11 @@ public class UserControllerTests
         result.Model.Should().BeOfType<UserListViewModel>().Which.Items.Should().OnlyContain(c => !c.IsActive);
     }
 
-    private User[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
+    private UserDto[] SetupUsers(string forename = "Johnny", string surname = "User", string email = "juser@example.com", bool isActive = true)
     {
         var users = new[]
         {
-            new User
+            new UserDto
             {
                 Forename = forename,
                 Surname = surname,
@@ -66,19 +67,19 @@ public class UserControllerTests
             }
         };
 
-        _userService
-            .Setup(s => s.GetAll())
+        _userApiService
+            .Setup(s => s.GetAll(""))
             .Returns(users);
 
         return users;
     }
 
-    private readonly Mock<IUserService> _userService = new();
-    private readonly Mock<ILogService> _logService = new();
+    private readonly Mock<IUserApiService> _userApiService = new();
     private readonly Mock<UserMapper> _userMapper = new();
     private readonly Mock<LogMapper> _logMapper = new();
     private readonly Mock<ISecurityService> _securityService = new();
+    private readonly Mock<ILogApiService> _logApiService = new();
     
     
-    private UsersController CreateController() => new(_userService.Object, _logService.Object, _logMapper.Object, _userMapper.Object, _securityService.Object);
+    private UsersController CreateController() => new(_userApiService.Object, _logApiService.Object, _logMapper.Object, _userMapper.Object, _securityService.Object);
 }

@@ -14,7 +14,7 @@ public class Log
     [DisplayName("User ID")]
     public long UserId { get; set; }    // For future expansion to track a logged in user effecting the entity
 
-    public User User { get; set; } = default!;  // For future expansion to track a logged in user effecting the entity
+    public User? User { get; set; } = default!;  // For future expansion to track a logged in user effecting the entity
     
     [StringLength(100)]
     [DisplayName("Log Summary")]

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
+using UserManagement.ApiServices.Logs;
+using UserManagement.ApiServices.Users;
 using UserManagement.Models;
+using UserManagement.Sdk.Model;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web;
 using UserManagement.Web.Mapper;
@@ -12,8 +15,8 @@ namespace UserManagement.WebMS.Controllers;
 
 [Route("users")]
 public class UsersController(
-    IUserService userService, 
-    ILogService logService, 
+    IUserApiService userService, 
+    ILogApiService logService, 
     LogMapper logMapper, 
     UserMapper userMapper,
     ISecurityService securityService
@@ -29,20 +32,20 @@ public class UsersController(
         
         ViewData["Title"] = $"Delete User [{user.Id}]";
         
-        logService.Create(new Log { Summary = SystemLogEntry.DeleteUserAccountOpened,  AffectedUser = user});
+        logService.Create(new LogDto { Summary = SystemLogEntry.DeleteUserAccountOpened,  AffectedUser = user});
         return View(user);
     }
     
     [HttpPost("ConfirmDeletion")]
     [ValidateAntiForgeryToken]
-    public IActionResult ConfirmDeletion(User user)
+    public IActionResult ConfirmDeletion(UserDto user)
     {
         ViewData["Title"] = "Delete";
         
         // Retrieve non-tracked entity before deletion and store it for audit purposes
         var previousUserDetail = userService.GetDetachedEntityById(user.Id);
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
-        logService.Create(new Log { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
+        logService.Create(new LogDto { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
 
         userService.Delete(user);
         
@@ -62,13 +65,13 @@ public class UsersController(
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
+        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
         return View(user);
     }
     
     [HttpPost("Update")]
     [ValidateAntiForgeryToken]
-    public IActionResult Update(User user)
+    public IActionResult Update(UserDto user)
     {
         if (!ModelState.IsValid)
         {
@@ -102,7 +105,7 @@ public class UsersController(
 
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         
-        logService.Create(new Log 
+        logService.Create(new LogDto 
         { 
             Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", 
             AffectedUser = existingUser, 
@@ -129,14 +132,14 @@ public class UsersController(
         vm.User = user;
         ViewData["Title"] = $"View User [{user.Id}]";
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = vm.User });
+        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = vm.User });
         
-        var logEntries = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<Log>())
+        var logEntries = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<LogDto>())
             .OrderByDescending(l => l.Id)
             .Take(logCount)
             .ToList();
 
-        vm.Logs = logMapper.Map(logEntries);
+        vm.Logs = logMapper.Map(logEntries ?? new List<LogDto>());
        
         return View(vm);
     }
@@ -145,7 +148,7 @@ public class UsersController(
     public ViewResult Create()
     {
         ViewData["Title"] = "Create User";
-        var newUser = new User  { IsActive = false };
+        var newUser = new UserDto  { IsActive = false };
         return View(new UserViewModel { User  = newUser });
     }
 
@@ -171,7 +174,7 @@ public class UsersController(
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = $"User created successfully.";
         
-        logService.Create(new Log { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
+        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
         return RedirectToAction("List");
     }
     
@@ -179,22 +182,24 @@ public class UsersController(
     public ViewResult List(bool? isActive)
     {
         ViewData["AppIcon"] = "people.gif";
-        logService.Create(new Log { Summary = SystemLogEntry.UserListViewed });
+        
+        logService.Create(new LogDto { Summary = SystemLogEntry.UserListViewed });
         
         IEnumerable<UserListItemViewModel> items;
         
+        string filter = "all";
+
         if (isActive.HasValue)
         {
-            items = GetUsersByActiveState(isActive.Value);
+            if(isActive == true)
+                filter = "active";
+            else if(isActive == false)
+                filter = "inactive";
         }
-        else
-        {
-            var users = userService.GetAll().ToList();
-            items = userMapper.Map(users);
             
-            ViewData["Title"] = "User List";
-        }
-
+        var users = userService.GetAll(filter).ToList();
+        items = userMapper.Map(users);
+            
         var model = new UserListViewModel
         {
             Items = items.ToList()
@@ -211,12 +216,12 @@ public class UsersController(
         if (isActive)
         {
             ViewData["Title"] = "Active Users";
-            logService.Create(new Log { Summary = SystemLogEntry.ActiveUsersFilterApplied });
+            logService.Create(new LogDto { Summary = SystemLogEntry.ActiveUsersFilterApplied });
         }
         else
         { 
             ViewData["Title"] = "Non Active Users";
-            logService.Create(new Log { Summary = SystemLogEntry.NonActiveUsersFilterApplied });
+            logService.Create(new LogDto { Summary = SystemLogEntry.NonActiveUsersFilterApplied });
         }
         
         return users;

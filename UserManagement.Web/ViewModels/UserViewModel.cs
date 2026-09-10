@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using UserManagement.Models;
+using UserManagement.Sdk.Model;
 using UserManagement.Web.Models.Logs;
 
 namespace UserManagement.Web.ViewModels;
@@ -7,7 +8,7 @@ namespace UserManagement.Web.ViewModels;
 public class UserViewModel
 {
     public int MaxLogCount { get; set; }
-    public User User { get; set; } = new();
+    public UserDto User { get; set; } = new();
     public List<LogListItemViewModel>? Logs { get; set; } = new();
     
     [Required(ErrorMessage = "Password is required.")]

@@ -1,12 +1,12 @@
 ﻿using System.Linq;
-using UserManagement.Models;
-using UserManagement.Services.Domain.Interfaces;
+using UserManagement.ApiServices.Logs;
+using UserManagement.Sdk.Model;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Logs;
 
 namespace UserManagement.WebMS.Controllers;
 
-public class LogsController(ILogService logService, LogMapper logMapper) : Controller
+public class LogsController(ILogApiService logApiService, LogMapper logMapper) : Controller
 {
     [HttpGet]
     public ViewResult List(int skip = 0, int take = 100)
@@ -16,11 +16,11 @@ public class LogsController(ILogService logService, LogMapper logMapper) : Contr
         ViewData["AppIcon"] = "eye.gif";
         ViewData["Title"] = "Log Viewer";
 
-        var items = logService.GetAll(skip, take).ToList();
+        var items = logApiService.GetAll(skip, take).ToList();
 
         var model = new LogListViewModel
         {
-            Items = logMapper.Map(items.ToList())
+            Items = logMapper.Map(items)
         };
         
         return View(model);
@@ -32,7 +32,8 @@ public class LogsController(ILogService logService, LogMapper logMapper) : Contr
         ViewData["AppIcon"] = "eye.gif";
         ViewData["Title"] = "Log Viewer";
 
-        var model = logMapper.Map(logService.GetById(id) ?? new Log());
+        var logDto = logApiService.GetById(id);
+        var model = logMapper.Map(logDto ?? new LogDto());
         return View(model);
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Riok.Mapperly.Abstractions;
-using UserManagement.Models;
+using UserManagement.Sdk.Model;
 using UserManagement.Web.Models.Users;
 
 namespace UserManagement.Web.Mapper;
@@ -8,11 +8,11 @@ namespace UserManagement.Web.Mapper;
 [Mapper]
 public partial class UserMapper
 {
-    private partial UserListItemViewModel MapToViewModelInternal(User entity);
-    private partial List<UserListItemViewModel> MapToViewModelInternal(List<User> entities);
+    private partial UserListItemViewModel MapToViewModelInternal(UserDto entity);
+    private partial List<UserListItemViewModel> MapToViewModelInternal(List<UserDto> entities);
     
     [UserMapping(Default = false)]
-    public UserListItemViewModel Map(User entity, bool includeCredentials = false)
+    public UserListItemViewModel Map(UserDto entity, bool includeCredentials = false)
     {
         UserListItemViewModel model = MapToViewModelInternal(entity);
 
@@ -26,7 +26,7 @@ public partial class UserMapper
     }
     
     [UserMapping(Default = false)]
-    public List<UserListItemViewModel> Map(List<User> entities, bool includeCredentials = false)
+    public List<UserListItemViewModel> Map(List<UserDto> entities, bool includeCredentials = false)
     {
         List<UserListItemViewModel> list = MapToViewModelInternal(entities);
 

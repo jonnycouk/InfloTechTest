@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Riok.Mapperly.Abstractions;
 using UserManagement.Models;
 using UserManagement.Sdk.Model;

@@ -6,16 +6,20 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+    <PackageReference Include="RestSharp" Version="114.0.1-alpha.0.10" />
     <PackageReference Include="Riok.Mapperly" Version="5.0.0-next.11" />
     <PackageReference Include="Westwind.AspNetCore.Markdown" Version="3.23.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\UserManagement.ApiServices\UserManagement.ApiServices.csproj" />
     <ProjectReference Include="..\UserManagement.Sdk\UserManagement.Sdk.csproj" />
     <ProjectReference Include="..\UserManagement.Services\UserManagement.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Services\" />
     <Folder Include="wwwroot\assets\glyphs\" />
     <Folder Include="wwwroot\favicon\" />
   </ItemGroup>

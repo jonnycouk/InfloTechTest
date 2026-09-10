@@ -67,6 +67,51 @@ public class UserController (IUserService userService, UserMapper userMapper) : 
             return BadRequest(getUserResponse);
         }
     }
+    
+    [HttpGet("GetAll/{filter}")]
+    public IActionResult GetAll(string filter)
+    {
+        var getUserResponse = new GetUserResponse { Success = true, Users = new()};
+        
+        try
+        {
+            List<Models.User>? users = new();
+
+            var passedFilterParam = filter.Trim().ToLower();
+            var allowedFilters = new List<string> { "all", "active", "inactive" };
+            
+            if (!allowedFilters.Contains(filter.Trim().ToLower()))
+                passedFilterParam = "all";
+
+            switch (passedFilterParam)
+            {
+                case "active":
+                    users = userService.GetAll().Where(x => x.IsActive).ToList();
+                    break;
+        
+                case "inactive":
+                    users = userService.GetAll().Where(x => !x.IsActive).ToList();
+                    break;
+        
+                case "all":
+                default:
+                    users = userService.GetAll().ToList();
+                    break;
+            }
+            
+            getUserResponse.Users.AddRange(userMapper.Map(users));
+            getUserResponse.Count = getUserResponse.Users.Count;
+            getUserResponse.Message = "Users retrieved successfully";
+            
+            return Ok(getUserResponse);
+        }
+        catch (Exception)
+        {
+            getUserResponse.Success = false;
+            getUserResponse.Message = "There was an error processing your request";
+            return BadRequest(getUserResponse);
+        }
+    }
 
     [HttpPut("Update")]
     public IActionResult Update(UpdateUserRequest request)
