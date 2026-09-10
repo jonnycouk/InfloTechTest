@@ -5,10 +5,10 @@ namespace UserManagement.Api.Services;
 
 public class SecurityService : ISecurityService
 {
-    public string GenerateSalt()
+    public string GenerateSalt(int length = 16)
     {
         const string validChars = "abcd@efghijkl!$mnopqrs(tuvwx)yzABCDEFGH#IJKLMNOPQRS+TUVWXYZ0123456789";
-        return RandomNumberGenerator.GetString(validChars, 16);
+        return RandomNumberGenerator.GetString(validChars, length);
     }
 
     public string SaltAndHashPassword(string salt, string password)

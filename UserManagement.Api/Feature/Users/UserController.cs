@@ -123,10 +123,25 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
         try
         {
             var existingUser = userService.GetById(request.Id);
-
+            
             if (existingUser == null)
             {
                 return NotFound();
+            }
+            
+            // Log who activates accounts and if no credentials are set, set a password for security so user has to reset it
+            if (!existingUser.IsActive && request.IsActive)
+            {
+                logService.Create(new Log { AffectedUserId = existingUser.Id, Summary = "Account Set To Active", Detail = "This account was set to an ACTIVE state", UserId = 1 }); // When auth is added, this will the user making the change
+
+                if (string.IsNullOrEmpty(existingUser.PasswordSalt))
+                    existingUser.PasswordSalt = securityService.GenerateSalt();
+
+                if (string.IsNullOrEmpty(existingUser.PasswordHash))
+                {
+                    var randomPassword = securityService.GenerateSalt(128);
+                    existingUser.PasswordHash =  securityService.SaltAndHashPassword(existingUser.PasswordSalt, randomPassword);
+                }
             }
             
             existingUser.Forename = request.Forename;
@@ -136,12 +151,8 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
             existingUser.Email = request.Email;
             existingUser.DateOfBirth = request.DateOfBirth;
             existingUser.IsActive = request.IsActive;
-            
-            userService.Update(existingUser);
 
-            // Log who activates accounts
-            if (!existingUser.IsActive && request.IsActive)
-                logService.Create(new Log { AffectedUserId = existingUser.Id, Summary = "Account Set To Active", Detail = "This account was set to an ACTIVE state", UserId = 1 }); // When auth is added, this will the user making the change
+            userService.Update(existingUser);
 
             updateUserResponse.Message = "User updated successfully";
             
