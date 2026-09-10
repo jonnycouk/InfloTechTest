@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Api.Mapper;
 using UserManagement.Api.Services;
+using UserManagement.Models;
 using UserManagement.Sdk.Request.Users;
 using UserManagement.Sdk.Response.Users;
 using UserManagement.Services.Domain.Interfaces;
@@ -10,7 +11,7 @@ namespace UserManagement.Api.Feature.Users;
 [Authenticate]
 [ApiController]
 [Route("v1/[controller]")]
-public class UserController (IUserService userService, UserMapper userMapper, ISecurityService securityService) : ControllerBase
+public class UserController (IUserService userService, UserMapper userMapper, ISecurityService securityService, ILogService logService) : ControllerBase
 {
     [HttpGet("Get/{id}")]
     public IActionResult Get(long id)
@@ -121,13 +122,32 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
         
         try
         {
-            var user = userMapper.Map(request);
-            userService.Update(user);
+            var existingUser = userService.GetById(request.Id);
+
+            if (existingUser == null)
+            {
+                return NotFound();
+            }
+            
+            existingUser.Forename = request.Forename;
+            existingUser.Surname = request.Surname;
+            existingUser.Organisation = request.Organisation;
+            existingUser.JobTitle = request.JobTitle;
+            existingUser.Email = request.Email;
+            existingUser.DateOfBirth = request.DateOfBirth;
+            existingUser.IsActive = request.IsActive;
+            
+            userService.Update(existingUser);
+
+            // Log who activates accounts
+            if (!existingUser.IsActive && request.IsActive)
+                logService.Create(new Log { AffectedUserId = existingUser.Id, Summary = "Account Set To Active", Detail = "This account was set to an ACTIVE state", UserId = 1 }); // When auth is added, this will the user making the change
+
             updateUserResponse.Message = "User updated successfully";
             
             return Ok(updateUserResponse);
         }
-        catch (Exception )
+        catch (Exception)
         {
             updateUserResponse.Success = false;
             updateUserResponse.Message = "There was an error updating the requested user";
@@ -143,7 +163,7 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
         try
         {
             var user = userMapper.Map(request);
-            user.PasswordHash = securityService.GenerateSalt();
+            user.PasswordSalt = securityService.GenerateSalt();
             user.PasswordHash = securityService.SaltAndHashPassword(user.PasswordSalt, user.PasswordHash);
             user.IsActive = false;
             

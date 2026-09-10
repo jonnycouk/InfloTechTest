@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
@@ -9,6 +9,7 @@ using UserManagement.Web;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
 using UserManagement.Web.ViewModels;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -62,7 +63,7 @@ public class UsersController(
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
 
-        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
+        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUserId = id });
         
         return View(user);
     }
@@ -104,7 +105,7 @@ public class UsersController(
 
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         
-        AddLog(new LogDto { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = existingUser, Detail = $"Previous Value: {jsonDetail}" });
+        AddLog(new LogDto { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUserId = existingUser.Id, Detail = $"Previous Value: {jsonDetail}" });
         return RedirectToAction("List");
     }
     
@@ -140,8 +141,6 @@ public class UsersController(
     {
         ViewData["Title"] = "Create User";
         var newUser = new UserDto  { IsActive = false };
-        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = newUser });
-        
         return View(new UserViewModel { User  = newUser });
     }
 
@@ -167,7 +166,7 @@ public class UsersController(
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = $"User created successfully.";
         
-        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
+        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountCreated, Detail = JsonSerializer.Serialize(vm.User) });
         return RedirectToAction("List");
     }
     
