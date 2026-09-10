@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UserManagement.ApiServices.Logs;
 using UserManagement.Sdk.Model;
@@ -24,6 +25,26 @@ public class LogControllerTests
         result.Model
             .Should().BeOfType<LogListViewModel>()
             .Which.Items.Should().BeEquivalentTo(logs);
+    }
+    
+    [Fact]
+    public void List_WhenServiceReturnsNoLogs_ModelMustContainEmptyList()
+    {
+        // Arrange
+        var controller = CreateController();
+        var emptyList = new List<LogDto>();
+
+        _logApiService
+            .Setup(s => s.GetAll(0, 10))
+            .Returns(emptyList);
+
+        // Act
+        var result = controller.List(0, 10);
+
+        // Assert
+        result.Model
+            .Should().BeOfType<LogListViewModel>()
+            .Which.Items.Should().BeEmpty();
     }
     
     private LogDto[] SetupLogs()
