@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
@@ -64,6 +63,7 @@ public class UsersController(
         ViewData["Title"] = $"Edit User [{user.Id}]";
 
         AddLog(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
+        
         return View(user);
     }
     
@@ -140,6 +140,8 @@ public class UsersController(
     {
         ViewData["Title"] = "Create User";
         var newUser = new UserDto  { IsActive = false };
+        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = newUser });
+        
         return View(new UserViewModel { User  = newUser });
     }
 
