@@ -5,13 +5,6 @@ namespace UserManagement.ApiServices.Users;
 public interface IUserApiService 
 {
     /// <summary>
-    /// Return users by active state
-    /// </summary>
-    /// <param name="isActive"></param>
-    /// <returns></returns>
-    IEnumerable<UserDto> FilterByActive(bool isActive);
-    
-    /// <summary>
     /// Get all users
     /// </summary>
     /// <returns></returns>

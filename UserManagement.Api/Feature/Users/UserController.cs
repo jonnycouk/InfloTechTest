@@ -9,7 +9,7 @@ namespace UserManagement.Api.Feature.Users;
 [Authenticate]
 [ApiController]
 [Route("v1/[controller]")]
-public class UserController (IUserService userService, UserMapper userMapper) : ControllerBase
+public class UserController (IUserService userService, UserMapper userMapper, ISecurityService securityService) : ControllerBase
 {
     [HttpGet("Get/{id}")]
     public IActionResult Get(long id)
@@ -142,6 +142,10 @@ public class UserController (IUserService userService, UserMapper userMapper) : 
         try
         {
             var user = userMapper.Map(request);
+            
+            user.PasswordHash = securityService.GenerateSalt();
+            user.PasswordHash = securityService.SaltAndHashPassword(user.PasswordSalt, user.PasswordHash);
+            
             userService.Create(user);
             createUserResponse.Message = "User created successfully";
             

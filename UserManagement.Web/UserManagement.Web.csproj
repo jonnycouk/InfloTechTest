@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="wwwroot\assets\glyphs\" />
     <Folder Include="wwwroot\favicon\" />
   </ItemGroup>

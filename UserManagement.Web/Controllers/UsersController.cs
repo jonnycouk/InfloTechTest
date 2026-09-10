@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text.Json;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
-using UserManagement.Models;
 using UserManagement.Sdk.Model;
 using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web;
@@ -140,7 +139,7 @@ public class UsersController(
             .ToList();
 
         vm.Logs = logMapper.Map(logEntries ?? new List<LogDto>());
-       
+        
         return View(vm);
     }
     
@@ -206,24 +205,5 @@ public class UsersController(
         };
         
         return View(model);
-    }
-
-    private IEnumerable<UserListItemViewModel> GetUsersByActiveState(bool isActive)
-    {
-        var items = userService.FilterByActive(isActive);
-        var users = userMapper.Map(items.ToList());
-
-        if (isActive)
-        {
-            ViewData["Title"] = "Active Users";
-            logService.Create(new LogDto { Summary = SystemLogEntry.ActiveUsersFilterApplied });
-        }
-        else
-        { 
-            ViewData["Title"] = "Non Active Users";
-            logService.Create(new LogDto { Summary = SystemLogEntry.NonActiveUsersFilterApplied });
-        }
-        
-        return users;
     }
 }
