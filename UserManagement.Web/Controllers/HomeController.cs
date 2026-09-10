@@ -1,8 +1,4 @@
-﻿using UserManagement.Models;
-using UserManagement.Services.Domain.Interfaces;
-using UserManagement.Web;
-
-namespace UserManagement.WebMS.Controllers;
+﻿namespace UserManagement.WebMS.Controllers;
 
 public class HomeController : Controller
 {
@@ -10,6 +6,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         ViewData["AppIcon"] = "people.gif";
+        ViewData["AppTitle"] = "Welcome";
         return RedirectToAction("List", "Users");
     }
 }

@@ -1,18 +1,20 @@
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RestSharp;
 using UserManagement.Sdk.Model;
+using UserManagement.Sdk.Request.Users;
 using UserManagement.Sdk.Response.Users;
 
 namespace UserManagement.ApiServices.Users;
 
-public class UserApiService : IUserApiService 
+public class UserApiService(IConfiguration configuration) : IUserApiService 
 {
     public IEnumerable<UserDto> GetAll(string filter)
     {
-        var client = new RestClient("https://inflo-api.jonny.uk");
         var request = new RestRequest($"v1/user/getAll/{filter}", Method.Get);
+        var client = new RestClient(configuration["ApiBaseUrl"]!);
+        request.AddHeader("x-api-key", configuration["ApiKey"]!);
         request.AddQueryParameter("filter", filter);
-        request.AddHeader("x-api-key", "jonnys-new-job");
     
         var response = client.Execute<GetUserResponse>(request);
 
@@ -25,17 +27,22 @@ public class UserApiService : IUserApiService
         return new List<UserDto>();
     }
 
-    public void Create(UserDto user)
+    public void Create(CreateUserRequest createUserRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest($"v1/user/create", Method.Post);
+        var client = new RestClient(configuration["ApiBaseUrl"]!);
+        request.AddHeader("x-api-key", configuration["ApiKey"]!);
+        request.AddBody(createUserRequest);
+    
+        client.Execute<CreateUserResponse>(request);
     }
 
     public UserDto? GetById(long id)
     {
-        var client = new RestClient("https://inflo-api.jonny.uk");
         var request = new RestRequest($"v1/user/get/{id}", Method.Get);
+        var client = new RestClient(configuration["ApiBaseUrl"]!);
+        request.AddHeader("x-api-key", configuration["ApiKey"]!);
         request.AddQueryParameter("id", id);
-        request.AddHeader("x-api-key", "jonnys-new-job");
     
         var response = client.Execute<GetUserResponse>(request);
 
@@ -48,18 +55,21 @@ public class UserApiService : IUserApiService
         return new UserDto();
     }
 
-    public UserDto? GetDetachedEntityById(long id)
+    public void Update(UpdateUserRequest updateUserRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest("v1/user/update", Method.Put);
+        var client = new RestClient(configuration["ApiBaseUrl"]!);
+        request.AddHeader("x-api-key", configuration["ApiKey"]!);
+        request.AddJsonBody(updateUserRequest);
+        client.Execute<UpdateUserRequest>(request);
     }
 
-    public void Update(UserDto user)
+    public void Delete(long id)
     {
-        throw new NotImplementedException();
-    }
-
-    public void Delete(UserDto user)
-    {
-        throw new NotImplementedException();
+        var request = new RestRequest($"v1/user/delete/{id}", Method.Delete);
+        var client = new RestClient(configuration["ApiBaseUrl"]!);
+        request.AddHeader("x-api-key", configuration["ApiKey"]!);
+        request.AddQueryParameter("id", id);
+        client.Execute<GetUserResponse>(request);
     }
 }

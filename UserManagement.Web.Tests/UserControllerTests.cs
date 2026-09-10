@@ -1,7 +1,6 @@
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
-using UserManagement.Services.Domain.Interfaces;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
 using UserManagement.WebMS.Controllers;
@@ -77,9 +76,8 @@ public class UserControllerTests
     private readonly Mock<IUserApiService> _userApiService = new();
     private readonly Mock<UserMapper> _userMapper = new();
     private readonly Mock<LogMapper> _logMapper = new();
-    private readonly Mock<ISecurityService> _securityService = new();
     private readonly Mock<ILogApiService> _logApiService = new();
     
     
-    private UsersController CreateController() => new(_userApiService.Object, _logApiService.Object, _logMapper.Object, _userMapper.Object, _securityService.Object);
+    private UsersController CreateController() => new(_userApiService.Object, _logApiService.Object, _logMapper.Object, _userMapper.Object);
 }

@@ -4,15 +4,17 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <UserSecretsId>6fe17d4e-80b0-45b5-9a88-8e447260c57b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
-      <PackageReference Include="RestSharp" Version="114.0.1-alpha.0.10" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+        <PackageReference Include="RestSharp" Version="114.0.1-alpha.0.10" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\UserManagement.Sdk\UserManagement.Sdk.csproj" />
+        <ProjectReference Include="..\UserManagement.Sdk\UserManagement.Sdk.csproj" />
     </ItemGroup>
 
 </Project>

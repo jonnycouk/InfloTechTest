@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
-using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Sdk.Request.Users;
 using UserManagement.Web;
 using UserManagement.Web.Mapper;
 using UserManagement.Web.Models.Users;
@@ -17,8 +18,7 @@ public class UsersController(
     IUserApiService userService, 
     ILogApiService logService, 
     LogMapper logMapper, 
-    UserMapper userMapper,
-    ISecurityService securityService
+    UserMapper userMapper
     ) : Controller
 {
     [HttpGet("Delete/{id:long}")]
@@ -31,7 +31,7 @@ public class UsersController(
         
         ViewData["Title"] = $"Delete User [{user.Id}]";
         
-        logService.Create(new LogDto { Summary = SystemLogEntry.DeleteUserAccountOpened,  AffectedUser = user});
+        AddLog(new LogDto { Summary = SystemLogEntry.DeleteUserAccountOpened,  AffectedUser = user});
         return View(user);
     }
     
@@ -40,13 +40,12 @@ public class UsersController(
     public IActionResult ConfirmDeletion(UserDto user)
     {
         ViewData["Title"] = "Delete";
-        
-        // Retrieve non-tracked entity before deletion and store it for audit purposes
-        var previousUserDetail = userService.GetDetachedEntityById(user.Id);
-        string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
-        logService.Create(new LogDto { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
+        var userForDeletion = userService.GetById(user.Id);
+        string jsonDetail = JsonSerializer.Serialize(userForDeletion);
 
-        userService.Delete(user);
+        AddLog(new LogDto { Summary = $"{SystemLogEntry.UserAccountDeleted}: ID: {user.Id}",  Detail = $"User: {jsonDetail}" });
+
+        userService.Delete(user.Id);
         
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = $"User deleted successfully.";
@@ -63,8 +62,8 @@ public class UsersController(
             return RedirectToAction("List");
      
         ViewData["Title"] = $"Edit User [{user.Id}]";
-        
-        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
+
+        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountOpenedToEdit, AffectedUser = user });
         return View(user);
     }
     
@@ -97,20 +96,15 @@ public class UsersController(
         existingUser.Organisation = user.Organisation;
         existingUser.JobTitle = user.JobTitle;
 
-        userService.Update(existingUser);
+        UpdateUserRequest updateUserRequest = userMapper.MapToUpdateRequest(existingUser);
+        userService.Update(updateUserRequest);
 
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = "User updated successfully.";
 
         string jsonDetail = JsonSerializer.Serialize(previousUserDetail);
         
-        logService.Create(new LogDto 
-        { 
-            Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", 
-            AffectedUser = existingUser, 
-            Detail = $"Previous Value: {jsonDetail}"
-        });
-
+        AddLog(new LogDto { Summary = $"{SystemLogEntry.UserAccountEdited}: ID: {user.Id}", AffectedUser = existingUser, Detail = $"Previous Value: {jsonDetail}" });
         return RedirectToAction("List");
     }
     
@@ -130,8 +124,6 @@ public class UsersController(
         
         vm.User = user;
         ViewData["Title"] = $"View User [{user.Id}]";
-        
-        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountViewed, AffectedUser = vm.User });
         
         var logEntries = (logService.GetByAffectedUserId(user.Id) ?? Array.Empty<LogDto>())
             .OrderByDescending(l => l.Id)
@@ -165,15 +157,15 @@ public class UsersController(
         
         // Enforce this in case it was changed in post
         vm.User.IsActive = false;
-        vm.User.PasswordSalt = securityService.GenerateSalt();
-        vm.User.PasswordHash = securityService.SaltAndHashPassword(vm.User.PasswordSalt, vm.Password);
+
+        CreateUserRequest request = userMapper.MapToCreateRequest(vm.User);
         
-        userService.Create(vm.User);
+        userService.Create(request);
         
         TempData["ToastType"] = "success";
         TempData["ToastMessage"] = $"User created successfully.";
         
-        logService.Create(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
+        AddLog(new LogDto { Summary = SystemLogEntry.UserAccountCreated, AffectedUser = vm.User });
         return RedirectToAction("List");
     }
     
@@ -182,7 +174,7 @@ public class UsersController(
     {
         ViewData["AppIcon"] = "people.gif";
         
-        logService.Create(new LogDto { Summary = SystemLogEntry.UserListViewed });
+        AddLog(new LogDto { Summary = SystemLogEntry.UserListViewed });
         
         IEnumerable<UserListItemViewModel> items;
         
@@ -205,5 +197,10 @@ public class UsersController(
         };
         
         return View(model);
+    }
+
+    private void AddLog(LogDto log)
+    {
+        logService.Create(logMapper.MapToCreateRequest(log));
     }
 }

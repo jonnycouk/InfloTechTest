@@ -10,6 +10,4 @@ public class UserDto
     public string? Email { get; set; }
     public bool IsActive { get; set; }
     public DateTime DateOfBirth { get; set; }
-    public string? PasswordSalt { get; set; }
-    public string? PasswordHash { get; set; }    
 }

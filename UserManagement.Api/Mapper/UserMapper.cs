@@ -1,6 +1,7 @@
 using Riok.Mapperly.Abstractions;
 using UserManagement.Models;
 using UserManagement.Sdk.Model;
+using UserManagement.Sdk.Request.Logs;
 using UserManagement.Sdk.Request.Users;
 
 namespace UserManagement.Api.Mapper;
@@ -8,48 +9,24 @@ namespace UserManagement.Api.Mapper;
 [Mapper]
 public partial class UserMapper
 {
+    [MapperIgnoreTarget(nameof(User.IsActive))]
+    [MapperIgnoreTarget(nameof(User.Id))]
     [MapperIgnoreTarget(nameof(User.PasswordHash))]
     [MapperIgnoreTarget(nameof(User.PasswordSalt))]
-    public partial User Map(UpdateUserRequest request);
-    
-    [MapperIgnoreTarget(nameof(User.Id))]
-    [MapperIgnoreTarget(nameof(User.IsActive))]
     public partial User Map(CreateUserRequest request);
     
-    [UserMapping(Default = false)]
-    public UserDto Map(User entity, bool includeCredentials = false)
-    {
-        UserDto model = MapToViewModelInternal(entity);
-
-        if (!includeCredentials)
-        {
-            model.PasswordSalt = string.Empty;
-            model.PasswordHash = string.Empty;
-        }
-
-        return model;
-    }
+    [MapperIgnoreSource(nameof(User.PasswordHash))]
+    [MapperIgnoreSource(nameof(User.PasswordSalt))]
+    public partial UserDto Map(User entity);
     
-    [UserMapping(Default = false)]
-    public List<UserDto> Map(List<User> entities, bool includeCredentials = false)
-    {
-        List<UserDto> list = MapToViewModelInternal(entities);
+    [MapperIgnoreSource(nameof(User.Id))]
+    [MapperIgnoreSource(nameof(User.IsActive))]
+    public partial CreateUserRequest Map(UserDto entity);
 
-        if (!includeCredentials)    
-        {
-            foreach (UserDto item in list)
-            {
-                item.PasswordSalt = string.Empty;
-                item.PasswordHash = string.Empty;
-            }
-        }
-
-        return list;
-    }
+    [MapperIgnoreTarget(nameof(User.PasswordHash))]
+    [MapperIgnoreTarget(nameof(User.PasswordSalt))]
+    public partial User Map(UpdateUserRequest entity);
     
-    
-    
-    private partial UserDto MapToViewModelInternal(User entity);
-    private partial List<UserDto> MapToViewModelInternal(List<User> entities);
+    public partial List<UserDto> Map(List<User> entities);
 
 }

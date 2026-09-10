@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\UserManagement.ApiServices\UserManagement.ApiServices.csproj" />
     <ProjectReference Include="..\UserManagement.Sdk\UserManagement.Sdk.csproj" />
-    <ProjectReference Include="..\UserManagement.Services\UserManagement.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

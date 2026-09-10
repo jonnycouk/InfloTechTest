@@ -1,4 +1,5 @@
 using UserManagement.Sdk.Model;
+using UserManagement.Sdk.Request.Users;
 
 namespace UserManagement.ApiServices.Users;
 
@@ -14,7 +15,7 @@ public interface IUserApiService
     /// Create new user
     /// </summary>
     /// <param name="user"></param>
-    void Create(UserDto user);
+    void Create(CreateUserRequest request);
     
     /// <summary>
     /// Get user by ID
@@ -22,23 +23,16 @@ public interface IUserApiService
     /// <param name="id"></param>
     /// <returns></returns>
     UserDto? GetById(long id);
-
-    /// <summary>
-    /// Returns a detached/non-tracked entity
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    UserDto? GetDetachedEntityById(long id);
     
     /// <summary>
     /// Update given user 
     /// </summary>
     /// <param name="user"></param>
-    void Update(UserDto user);
+    void Update(UpdateUserRequest request);
     
     /// <summary>
     /// Deleted given user
     /// </summary>
     /// <param name="user"></param>
-    void Delete(UserDto user);
+    void Delete(long id);
 }

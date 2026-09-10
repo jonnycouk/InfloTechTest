@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using UserManagement.Models;
 using UserManagement.Sdk.Model;
 using UserManagement.Web.Models.Logs;
 

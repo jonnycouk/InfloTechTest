@@ -11,6 +11,10 @@ public partial class LogMapper
 {
     private readonly UserMapper _userMapper = new();
     
+    [MapperIgnoreSource(nameof(LogDto.AffectedUser))]
+    [MapperIgnoreSource(nameof(LogDto.User))]
+    public partial AddLogRequest MapToCreateRequest(LogDto entity);
+    
     [MapperIgnoreTarget(nameof(LogDto.AffectedUser))]
     [MapperIgnoreTarget(nameof(LogDto.User))]
     public partial LogListItemViewModel Map(AddLogRequest request);

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using UserManagement.Api.Mapper;
+using UserManagement.Api.Services;
 using UserManagement.Sdk.Request.Users;
 using UserManagement.Sdk.Response.Users;
 using UserManagement.Services.Domain.Interfaces;
@@ -117,7 +118,7 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
     public IActionResult Update(UpdateUserRequest request)
     {
         var updateUserResponse = new UpdateUserResponse { Success = true };
-
+        
         try
         {
             var user = userMapper.Map(request);
@@ -142,9 +143,9 @@ public class UserController (IUserService userService, UserMapper userMapper, IS
         try
         {
             var user = userMapper.Map(request);
-            
             user.PasswordHash = securityService.GenerateSalt();
             user.PasswordHash = securityService.SaltAndHashPassword(user.PasswordSalt, user.PasswordHash);
+            user.IsActive = false;
             
             userService.Create(user);
             createUserResponse.Message = "User created successfully";

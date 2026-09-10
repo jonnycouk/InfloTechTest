@@ -10,7 +10,6 @@ public class AuthenticateAttribute : Attribute, IAsyncActionFilter
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        // 1. Check if the header is present
         if (!context.HttpContext.Request.Headers.TryGetValue(ApiKeyHeaderName, out var extractedApiKey))
         {
             context.Result = new UnauthorizedObjectResult("API Key missing from request headers.");
