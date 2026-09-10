@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Newtonsoft.Json;
 using UserManagement.ApiServices.Logs;
 using UserManagement.ApiServices.Users;
 using UserManagement.Sdk.Model;
