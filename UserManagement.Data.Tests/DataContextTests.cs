@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using UserManagement.Models;
 
 namespace UserManagement.Data.Tests;
@@ -16,6 +18,8 @@ public class DataContextTests
         {
             Forename = "Brand New",
             Surname = "User",
+            JobTitle =  "Job Title",
+            Organisation =  "Organisation",
             Email = "brandnewuser@example.com"
         };
         context.Create(entity);
@@ -43,6 +47,15 @@ public class DataContextTests
         // Assert: Verifies that the action of the method under test behaves as expected.
         result.Should().NotContain(s => s.Email == entity.Email);
     }
+   
+    private DataContext CreateContext()
+    {
+        var options = new DbContextOptionsBuilder<DataContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
 
-    private DataContext CreateContext() => new();
+        var context = new DataContext(options);
+        context.Database.EnsureCreated(); // This forces EF Core to seed the data
+        return context;
+    }
 }

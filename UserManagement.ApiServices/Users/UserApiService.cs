@@ -11,6 +11,8 @@ public class UserApiService(IConfiguration configuration) : IUserApiService
 {
     public IEnumerable<UserDto> GetAll(string filter)
     {
+        if (filter == null) throw new ArgumentNullException(nameof(filter));
+        if (filter == null) throw new ArgumentNullException(nameof(filter));
         var request = new RestRequest($"v1/user/getAll/{filter}", Method.Get);
         var client = new RestClient(configuration["ApiBaseUrl"]!);
         request.AddHeader("x-api-key", configuration["ApiKey"]!);
