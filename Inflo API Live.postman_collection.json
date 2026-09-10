@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "6d14eef9-9fa7-42ff-921a-65f85844d605",
+    "_postman_id": "8111b44b-830d-4cb3-b7f5-498e69108dcc",
     "name": "Inflo API Live",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "4188256"
@@ -67,6 +67,60 @@
           "response": []
         },
         {
+          "name": "Get All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/user/getAll",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "user",
+                "getAll"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Active State",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/user/getAll",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "user",
+                "getAll"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Update User",
           "request": {
             "method": "PUT",
@@ -109,7 +163,7 @@
             "header": [
               {
                 "key": "x-api-key",
-                "value": "test"
+                "value": "{{api-key}}"
               }
             ],
             "body": {
@@ -122,12 +176,13 @@
               }
             },
             "url": {
-              "raw": "https://localhost:7063/v1/user/create",
+              "raw": "https://inflo-api.jonny.uk/v1/user/create",
               "protocol": "https",
               "host": [
-                "localhost"
+                "inflo-api",
+                "jonny",
+                "uk"
               ],
-              "port": "7063",
               "path": [
                 "v1",
                 "user",
@@ -144,7 +199,7 @@
             "header": [
               {
                 "key": "x-api-key",
-                "value": "test"
+                "value": "{{api-key}}"
               }
             ],
             "body": {
@@ -157,12 +212,13 @@
               }
             },
             "url": {
-              "raw": "https://localhost:7063/v1/user/delete/15",
+              "raw": "https://inflo-api.jonny.uk/v1/user/delete/15",
               "protocol": "https",
               "host": [
-                "localhost"
+                "inflo-api",
+                "jonny",
+                "uk"
               ],
-              "port": "7063",
               "path": [
                 "v1",
                 "user",
@@ -212,16 +268,17 @@
             "header": [
               {
                 "key": "x-api-key",
-                "value": "test"
+                "value": "{{api-key}}"
               }
             ],
             "url": {
-              "raw": "https://localhost:7063/v1/logs/get/1/5",
+              "raw": "https://inflo-api.jonny.uk/v1/logs/get/1/5",
               "protocol": "https",
               "host": [
-                "localhost"
+                "inflo-api",
+                "jonny",
+                "uk"
               ],
-              "port": "7063",
               "path": [
                 "v1",
                 "logs",
@@ -234,13 +291,41 @@
           "response": []
         },
         {
+          "name": "Get Logs For User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "{{api-key}}"
+              }
+            ],
+            "url": {
+              "raw": "https://inflo-api.jonny.uk/v1/logs/getByAffectedUser/12",
+              "protocol": "https",
+              "host": [
+                "inflo-api",
+                "jonny",
+                "uk"
+              ],
+              "path": [
+                "v1",
+                "logs",
+                "getByAffectedUser",
+                "12"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Add Log",
           "request": {
             "method": "POST",
             "header": [
               {
                 "key": "x-api-key",
-                "value": "test"
+                "value": "{{api-key}}"
               }
             ],
             "body": {
@@ -253,12 +338,13 @@
               }
             },
             "url": {
-              "raw": "https://localhost:7063/v1/logs/add/",
+              "raw": "https://inflo-api.jonny.uk/v1/logs/add/",
               "protocol": "https",
               "host": [
-                "localhost"
+                "inflo-api",
+                "jonny",
+                "uk"
               ],
-              "port": "7063",
               "path": [
                 "v1",
                 "logs",
@@ -277,8 +363,7 @@
   },
   "variable": [
     {
-      "key": "api-key",
-      "secret": true
+      "key": "api-key"
     }
   ]
 }
